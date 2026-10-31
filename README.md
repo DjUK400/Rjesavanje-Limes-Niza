@@ -1,5 +1,7 @@
 # Rješavanje limesa niza
 
+> Dio kolekcije **Aplikacije za fakultet**: https://djuk400.github.io/
+
 ### 👉 [Otvori sajt: djuk400.github.io/Rjesavanje-Limes-Niza](https://djuk400.github.io/Rjesavanje-Limes-Niza/)
 
 Besplatan sajt za studente koji rješava limese nizova **korak po korak**. Cilj nije da prepišeš rezultat, nego da naučiš postupak: svaki korak ima hint i obrazloženje *zašto* se radi baš tako. Zadaci su urađeni po uzoru na vježbe, kolokvijume i ispitne rokove iz Matematike 1 (građevinski fakultet).
