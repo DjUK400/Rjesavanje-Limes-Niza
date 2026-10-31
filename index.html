@@ -1,0 +1,1350 @@
+<!doctype html>
+<html lang="sr-Latn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Limesi nizova</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+:root{--bg:#f6f5f1;--card:#ffffff;--ink:#1d1d1b;--mute:#6b6a64;--line:#e2e0d8;--acc:#2f5bd3;--acc-soft:#e8eefc;--ok:#1f7a4d;--ok-soft:#e3f3ea;--bad:#b3261e;--bad-soft:#fbe9e7;--warn:#8a5a00;--warn-soft:#fff3d6;--why:#f3f0ff;--why-line:#6b4fd8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15161a;--card:#1e2026;--ink:#eceae4;--mute:#9a988f;--line:#30323a;--acc:#7d9bff;--acc-soft:#232b45;--ok:#5ccf93;--ok-soft:#18301f;--bad:#ff8a80;--bad-soft:#3a1d1b;--warn:#ffc65c;--warn-soft:#3a2e12;--why:#241f3a;--why-line:#a38cff}}
+:root[data-theme="dark"]{--bg:#15161a;--card:#1e2026;--ink:#eceae4;--mute:#9a988f;--line:#30323a;--acc:#7d9bff;--acc-soft:#232b45;--ok:#5ccf93;--ok-soft:#18301f;--bad:#ff8a80;--bad-soft:#3a1d1b;--warn:#ffc65c;--warn-soft:#3a2e12;--why:#241f3a;--why-line:#a38cff}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:16px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:8px 0 14px}
+h1{font-size:1.45rem;margin:0;letter-spacing:-.01em}
+h1 small{display:block;font-size:.85rem;font-weight:400;color:var(--mute)}
+.tabs{display:flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px}
+.tabs button{border:0;background:none;color:var(--mute);padding:8px 14px;border-radius:9px;font:inherit;font-size:.95rem;cursor:pointer}
+.tabs button.on{background:var(--acc-soft);color:var(--acc);font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+label{font-size:.85rem;color:var(--mute);display:block;margin-bottom:4px}
+select,input[type=text]{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+input[type=text]{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.95rem}
+select:focus,input:focus{outline:2px solid var(--acc);outline-offset:1px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px}
+.grid .wide{grid-column:1/-1}
+.desc{color:var(--mute);font-size:.92rem;margin:8px 0 0}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{text-decoration:none;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:5px 11px;font:inherit;font-size:.82rem;cursor:pointer}
+.chip:hover{border-color:var(--acc);color:var(--acc)}
+.preview{margin-top:14px;padding:12px;border:1px dashed var(--line);border-radius:10px;min-height:56px;overflow-x:auto;text-align:center}
+.preview .ph{color:var(--mute);font-size:.9rem}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}
+.btn{border:0;background:var(--acc);color:#fff;font:inherit;font-weight:600;padding:11px 18px;border-radius:10px;cursor:pointer}
+.btn.ghost{background:var(--acc-soft);color:var(--acc)}
+.btn.small{padding:6px 11px;font-size:.85rem;font-weight:500}
+.toggle{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-size:.95rem}
+.toggle input{display:none}
+.sw{width:42px;height:24px;border-radius:12px;background:var(--line);position:relative;transition:.2s}
+.sw:after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}
+.toggle input:checked+.sw{background:var(--acc)}
+.toggle input:checked+.sw:after{left:21px}
+.steps{counter-reset:s}
+.step{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:var(--card)}
+.step h3{margin:0 0 6px;font-size:1rem;display:flex;gap:8px;align-items:baseline}
+.step h3:before{counter-increment:s;content:counter(s);background:var(--acc-soft);color:var(--acc);font-size:.8rem;border-radius:6px;padding:1px 7px;font-weight:700}
+.hint{background:var(--warn-soft);color:var(--ink);border-left:3px solid var(--warn);padding:8px 10px;border-radius:6px;font-size:.93rem;margin:6px 0}
+.hint b{color:var(--warn)}
+.body{overflow-x:auto}
+.why{background:var(--why);border-left:3px solid var(--why-line);padding:9px 11px;border-radius:6px;font-size:.92rem;margin-top:8px}
+.why b{color:var(--why-line)}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.result{border:2px solid var(--ok);background:var(--ok-soft);border-radius:12px;padding:12px 14px;text-align:center;overflow-x:auto}
+.result .lab{font-size:.8rem;color:var(--ok);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.note{background:var(--warn-soft);border-radius:10px;padding:10px 12px;font-size:.9rem;margin-top:10px}
+.try{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.try input{flex:1;min-width:160px}
+.fb{font-weight:600;margin-top:8px}
+.fb.ok{color:var(--ok)}.fb.bad{color:var(--bad)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:right}
+th:first-child,td:first-child{text-align:left}
+details summary{cursor:pointer;color:var(--acc);font-weight:600}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(140%);max-width:min(560px,calc(100% - 32px));background:var(--card);color:var(--ink);border:1px solid var(--line);border-left:5px solid var(--bad);box-shadow:0 10px 30px rgba(0,0,0,.18);padding:12px 40px 12px 14px;border-radius:12px;transition:.3s;z-index:9;font-size:.93rem;visibility:hidden}
+.toast.show{transform:translateX(-50%) translateY(0);visibility:visible}
+.toast.warn{border-left-color:var(--warn)}
+.toast b{display:block;margin-bottom:2px}
+.toast .x{position:absolute;right:8px;top:6px;border:0;background:none;color:var(--mute);font-size:1.2rem;cursor:pointer}
+.hidden{display:none!important}
+/* pravila */
+.rules h2{font-size:1.15rem;margin:0 0 10px}
+.rules h3{font-size:1rem;margin:14px 0 6px}
+.rules p,.rules li{font-size:.95rem}
+.rules ul{padding-left:20px;margin:6px 0}
+.toc{display:flex;flex-wrap:wrap;gap:6px}
+.forms{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.form{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.form .t{font-size:1.15rem;text-align:center;margin-bottom:4px}
+.form p{margin:4px 0;font-size:.88rem}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;padding:1px 7px;border-radius:5px;background:var(--bad-soft);color:var(--bad);margin-left:4px}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}
+.bx{overflow-x:auto}
+.mistake{border-left:3px solid var(--bad);padding:4px 10px;margin:8px 0;background:var(--bad-soft);border-radius:6px}
+footer{color:var(--mute);font-size:.8rem;text-align:center;padding:20px 0}
+.themebtn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 10px;cursor:pointer;font:inherit}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Limesi nizova<small>Rješavač s postupkom, hintovima i objašnjenjima</small></h1>
+  <div style="display:flex;gap:8px;align-items:center">
+    <nav class="tabs" role="tablist">
+      <button class="on" data-tab="solve">Rješavač</button>
+      <button data-tab="rules">Pravila i pojmovi</button>
+    </nav>
+    <button class="themebtn" id="theme" title="Svijetla/tamna tema">◐</button>
+  </div>
+</header>
+
+<main id="tab-solve">
+  <section class="card">
+    <label for="type">Tip zadatka</label>
+    <select id="type"></select>
+    <p class="desc" id="tdesc"></p>
+    <div class="grid" id="fields"></div>
+    <div class="presets" id="presets"></div>
+    <div class="preview" id="preview"><span class="ph">Ovdje se prikazuje zadatak kako si ga unio.</span></div>
+    <div class="row">
+      <label class="toggle"><input type="checkbox" id="hints" checked><span class="sw"></span> Hintovi (rješavam korak po korak)</label>
+      <label class="toggle"><input type="checkbox" id="tryself"><span class="sw"></span> Pokušaj sam prije rezultata</label>
+    </div>
+    <div class="row"><button class="btn" id="go">Riješi</button><button class="btn ghost small" id="help">Kako se unosi?</button></div>
+    <div class="note hidden" id="syntax">
+      Množenje: <code>3n</code> ili <code>3*n</code> · stepen: <code>n^2</code> · zagrade: <code>(2k+1)^2</code> · razlomak broja: <code>7/4</code> ·
+      eksponencijalni član: <code>3*2^(n+1)</code>, <code>(-2)^n</code> · decimale: <code>0.5</code>.
+      Brojilac i imenilac se uvijek unose u odvojena polja. Polja s natpisom „broj“ primaju samo konstante.
+    </div>
+  </section>
+  <section id="out"></section>
+</main>
+
+<main id="tab-rules" class="hidden rules"></main>
+<footer>Rezultat se računa tačnom racionalnom aritmetikom; numerička tabela služi samo kao ilustracija. Podržani su samo tipovi zadataka sa provjerenim šablonom.</footer>
+</div>
+<div class="toast" id="toast" role="alert"><button class="x" aria-label="Zatvori">×</button><b id="tt"></b><span id="tm"></span></div>
+<script>
+'use strict';
+/* ===================== JEZGRO: limesi nizova ===================== */
+const R = String.raw;
+class MathErr extends Error {}
+class Unsupported extends Error {}
+const CUR = { problem: null };
+
+/* ---------- racionalni brojevi (BigInt) ---------- */
+function bgcd(a, b) { if (a < 0n) a = -a; if (b < 0n) b = -b; while (b) { const t = a % b; a = b; b = t; } return a; }
+class Q {
+  constructor(n, d = 1n) {
+    n = BigInt(n); d = BigInt(d);
+    if (d === 0n) throw new MathErr('Dijeljenje nulom.');
+    if (d < 0n) { n = -n; d = -d; }
+    const g = bgcd(n, d); if (g > 1n) { n /= g; d /= g; }
+    if (n === 0n) d = 1n;
+    this.n = n; this.d = d;
+  }
+  static of(x) { if (x instanceof Q) return x; if (typeof x === 'bigint') return new Q(x); if (Number.isInteger(x)) return new Q(BigInt(x)); throw new Error('Q.of'); }
+  add(o) { o = Q.of(o); return new Q(this.n * o.d + o.n * this.d, this.d * o.d); }
+  sub(o) { o = Q.of(o); return new Q(this.n * o.d - o.n * this.d, this.d * o.d); }
+  mul(o) { o = Q.of(o); return new Q(this.n * o.n, this.d * o.d); }
+  div(o) { o = Q.of(o); if (o.n === 0n) throw new MathErr('Dijeljenje nulom.'); return new Q(this.n * o.d, this.d * o.n); }
+  neg() { return new Q(-this.n, this.d); }
+  abs() { return new Q(this.n < 0n ? -this.n : this.n, this.d); }
+  isZero() { return this.n === 0n; }
+  isOne() { return this.n === 1n && this.d === 1n; }
+  isInt() { return this.d === 1n; }
+  sign() { return this.n > 0n ? 1 : this.n < 0n ? -1 : 0; }
+  cmp(o) { o = Q.of(o); const x = this.n * o.d - o.n * this.d; return x > 0n ? 1 : x < 0n ? -1 : 0; }
+  eq(o) { return this.cmp(o) === 0; }
+  pow(k) { let r = new Q(1n); const b = k < 0 ? new Q(1n).div(this) : this; k = Math.abs(k); for (let i = 0; i < k; i++) r = r.mul(b); return r; }
+  toNumber() { return Number(this.n) / Number(this.d); }
+  floor() { let f = this.n / this.d; if (this.n < 0n && f * this.d !== this.n) f -= 1n; return Number(f); }
+  tex() { if (this.d === 1n) return this.n.toString(); const s = this.n < 0n ? '-' : ''; const a = this.n < 0n ? -this.n : this.n; return s + R`\frac{${a}}{${this.d}}`; }
+  str() { return this.d === 1n ? this.n.toString() : this.n + '/' + this.d; }
+}
+const Z = new Q(0n), ONE = new Q(1n);
+const q = (a, b = 1) => new Q(BigInt(a), BigInt(b));
+function qFromStr(s) {
+  const m = /^(\d+(?:\.\d+)?)(?:\/(\d+(?:\.\d+)?))?$/.exec(s);
+  if (!m) throw new MathErr(`Neispravan broj „${s}“.`);
+  const dec = t => { const [i, f = ''] = t.split('.'); return new Q(BigInt(i + f), 10n ** BigInt(f.length)); };
+  return m[2] ? dec(m[1]).div(dec(m[2])) : dec(m[1]);
+}
+function irootBig(n, m) {
+  if (n < 0n) return null; if (n < 2n) return n;
+  const ap = Math.round(Math.pow(Number(n), 1 / m));
+  for (let d = -2; d <= 2; d++) { const r = BigInt(Math.max(0, ap + d)); if (r ** BigInt(m) === n) return r; }
+  return null;
+}
+function qroot(x, m) {
+  if (m === 1) return x;
+  if (x.sign() < 0) { if (m % 2 === 0) return null; const r = qroot(x.neg(), m); return r ? r.neg() : null; }
+  const a = irootBig(x.n, m), b = irootBig(x.d, m);
+  return (a !== null && b !== null) ? new Q(a, b) : null;
+}
+
+/* ---------- polinomi: niz koeficijenata, indeks = stepen ---------- */
+const P = {
+  norm(p) { p = p.slice(); while (p.length && p[p.length - 1].isZero()) p.pop(); return p; },
+  c(x) { return P.norm([Q.of(x)]); },
+  add(a, b) { const n = Math.max(a.length, b.length), r = []; for (let i = 0; i < n; i++) r.push((a[i] || Z).add(b[i] || Z)); return P.norm(r); },
+  neg(a) { return a.map(x => x.neg()); },
+  sub(a, b) { return P.add(a, P.neg(b)); },
+  mul(a, b) { if (!a.length || !b.length) return []; const r = Array(a.length + b.length - 1).fill(Z); for (let i = 0; i < a.length; i++) for (let j = 0; j < b.length; j++) r[i + j] = r[i + j].add(a[i].mul(b[j])); return P.norm(r); },
+  scale(a, k) { return P.norm(a.map(x => x.mul(k))); },
+  pow(a, k) { let r = [ONE]; for (let i = 0; i < k; i++) r = P.mul(r, a); return r; },
+  deg(a) { return a.length - 1; },
+  lead(a) { return a[a.length - 1]; },
+  nterms(a) { return a.filter(x => !x.isZero()).length; },
+  evalQ(a, x) { let r = Z; for (let i = a.length - 1; i >= 0; i--) r = r.mul(x).add(a[i]); return r; },
+  evalN(a, x) { let r = 0; for (let i = a.length - 1; i >= 0; i--) r = r * x + a[i].toNumber(); return r; },
+  mono(c, k) { const r = Array(k + 1).fill(Z); r[k] = Q.of(c); return P.norm(r); },
+  tex(a, v = 'n') {
+    let out = '', first = true;
+    for (let i = a.length - 1; i >= 0; i--) {
+      const c = a[i]; if (!c || c.isZero()) continue;
+      const neg = c.sign() < 0, ab = c.abs();
+      const mon = i === 0 ? '' : i === 1 ? v : `${v}^{${i}}`;
+      const t = coefMon(ab, mon);
+      out += first ? (neg ? '-' : '') + t : (neg ? ' - ' : ' + ') + t; first = false;
+    }
+    return out || '0';
+  }
+};
+function coefMon(c, mon) { if (!mon) return c.tex(); if (c.isOne()) return mon; if (c.eq(-1)) return '-' + mon; return c.tex() + mon; }
+function signedTerm(c, mon, first) { const neg = c.sign() < 0; const t = coefMon(c.abs(), mon); return first ? (neg ? '-' : '') + t : (neg ? ' - ' : ' + ') + t; }
+
+/* ---------- TeX pomoćnici ---------- */
+function paren(t) { return R`\left(${t}\right)`; }
+function npow(e, v = 'n') {
+  if (e.isZero()) return '';
+  if (e.isOne()) return v;
+  if (e.isInt()) return `${v}^{${e.n}}`;
+  if (e.n === 1n && e.d === 2n) return R`\sqrt{${v}}`;
+  if (e.n === 1n) return R`\sqrt[${e.d}]{${v}}`;
+  return `${v}^{${e.tex()}}`;
+}
+function rootTex(m, inner) { if (m === 1) return inner; if (m === 2) return R`\sqrt{${inner}}`; return R`\sqrt[${m}]{${inner}}`; }
+function bracketTex(p, D, v = 'n') {
+  let out = '', first = true;
+  for (let i = D; i >= 0; i--) {
+    const c = p[i] || Z; if (c.isZero()) continue;
+    const k = D - i, neg = c.sign() < 0, a = c.abs();
+    let t;
+    if (k === 0) t = a.tex();
+    else { const den = k === 1 ? v : `${v}^{${k}}`; t = R`\frac{${a.n}}{${a.d === 1n ? '' : a.d}${den}}`; }
+    out += first ? (neg ? '-' : '') + t : (neg ? ' - ' : ' + ') + t; first = false;
+  }
+  return out || '0';
+}
+/* broj oblika c·ᵐ√A (A>0), automatski pojednostavljen */
+function surd(c, A, m) {
+  c = Q.of(c); A = Q.of(A);
+  if (c.isZero()) return { q: Z, tex: '0', val: 0 };
+  const r = qroot(A, m);
+  if (r) { const v = c.mul(r); return { q: v, tex: v.tex(), val: v.toNumber() }; }
+  // A = n/d  ->  ᵐ√A = ᵐ√(n·d^(m-1)) / d
+  let N = A.n * A.d ** BigInt(m - 1); let coef = c.div(A.d);
+  for (let k = 2n; k <= 10000n && k ** BigInt(m) <= N; k++) { const km = k ** BigInt(m); while (N % km === 0n) { N /= km; coef = coef.mul(k); } }
+  const rad = rootTex(m, N.toString());
+  const neg = coef.sign() < 0, a = coef.abs();
+  let t;
+  if (a.isOne()) t = rad; else if (a.isInt()) t = a.n + rad; else t = R`\frac{${a.n === 1n ? '' : a.n}${rad}}{${a.d}}`;
+  return { q: null, tex: (neg ? '-' : '') + t, val: coef.toNumber() * Math.pow(Number(N), 1 / m), coef, N, m };
+}
+function ratPlusSurd(p, s) { // p + s
+  if (s.q) { const v = p.add(s.q); return { q: v, tex: v.tex(), val: v.toNumber() }; }
+  if (p.isZero()) return s;
+  const pos = s.coef.sign() > 0; const sAbs = surd(s.coef.abs(), new Q(s.N), s.m);
+  return { q: null, tex: p.tex() + (pos ? ' + ' : ' - ') + sAbs.tex, val: p.toNumber() + s.val };
+}
+
+/* ---------- rezultati ---------- */
+const Res = {
+  num: x => ({ type: 'num', q: x }), inf: s => ({ type: 'inf', s }), dne: why => ({ type: 'dne', why }),
+  sym: (tex, val) => ({ type: 'sym', tex, val }),
+  fromSurd: s => s.q ? ({ type: 'num', q: s.q }) : ({ type: 'sym', tex: s.tex, val: s.val })
+};
+function resTex(r) {
+  switch (r.type) {
+    case 'num': return r.q.tex();
+    case 'inf': return r.s > 0 ? R`+\infty` : R`-\infty`;
+    case 'dne': return R`\text{ne postoji}`;
+    case 'sym': return r.tex;
+    case 'params': return R`a = ${r.a.tex},\quad b = ${r.b.tex}`;
+  }
+}
+function resVal(r) { switch (r.type) { case 'num': return r.q.toNumber(); case 'inf': return r.s * Infinity; case 'dne': return NaN; case 'sym': return r.val; } return NaN; }
+
+/* ---------- parser polinoma (sa TeX prikazom originalnog zapisa) ---------- */
+function normSrc(src) {
+  return String(src == null ? '' : src).replace(/[−–—]/g, '-').replace(/[·×∙⋅]/g, '*').replace(/:/g, '/')
+    .replace(/²/g, '^2').replace(/³/g, '^3').replace(/⁴/g, '^4').replace(/\s+/g, '');
+}
+function tokenize(src) {
+  const s = normSrc(src);
+  if (!s) throw new MathErr('Polje je prazno.');
+  const toks = []; let i = 0;
+  while (i < s.length) {
+    const ch = s[i];
+    if (/[0-9.]/.test(ch)) { let j = i; while (j < s.length && /[0-9.]/.test(s[j])) j++; const t = s.slice(i, j); if (!/^\d+(\.\d+)?$/.test(t)) throw new MathErr(`Neispravan broj „${t}“.`); toks.push({ k: 'num', v: t }); i = j; continue; }
+    if (/[a-zA-Z]/.test(ch)) { toks.push({ k: 'var', v: ch }); i++; continue; }
+    if ('+-*/^()'.includes(ch)) { toks.push({ k: ch }); i++; continue; }
+    if (ch === '[' || ch === '{') { toks.push({ k: '(' }); i++; continue; }
+    if (ch === ']' || ch === '}') { toks.push({ k: ')' }); i++; continue; }
+    throw new MathErr(`Nepoznat znak „${ch}“.`);
+  }
+  return toks;
+}
+function parsePoly(src, v = 'n', outV = v) {
+  const toks = tokenize(src); let pos = 0;
+  const peek = () => toks[pos];
+  const eat = k => { const t = toks[pos]; if (!t || t.k !== k) throw new MathErr(`Očekivan znak „${k}“ — provjeri zagrade.`); pos++; return t; };
+  const needDot = bt => /^(\d|\\frac|\\cdot)/.test(bt);
+  function mulNode(a, b) {
+    const at = a.k === 'sum' ? paren(a.t) : a.t;
+    const bt = (b.k === 'sum' || b.k === 'neg') ? paren(b.t) : b.t;
+    return { p: P.mul(a.p, b.p), t: at + (needDot(bt) ? R`\cdot ` : '') + bt, k: 'prod' };
+  }
+  function primary() {
+    const t = peek();
+    if (!t) throw new MathErr('Izraz je nepotpun.');
+    if (t.k === 'num') { pos++; return { p: P.c(qFromStr(t.v)), t: t.v, k: 'num' }; }
+    if (t.k === 'var') {
+      if (t.v !== v) throw new MathErr(`Nepoznata oznaka „${t.v}“ — u ovom polju koristi promjenljivu ${v}.`);
+      pos++; return { p: [Z, ONE], t: outV, k: 'var' };
+    }
+    if (t.k === '(') { pos++; const e = expr(); eat(')'); return { p: e.p, t: paren(e.t), k: 'atom' }; }
+    throw new MathErr(`Neočekivan znak „${t.k}“.`);
+  }
+  function power() {
+    const b = primary();
+    if (peek() && peek().k === '^') {
+      pos++;
+      let et;
+      if (peek() && peek().k === '(') { pos++; et = eat('num'); eat(')'); } else et = eat('num');
+      if (!/^\d+$/.test(et.v)) throw new MathErr('Stepen mora biti prirodan broj (npr. n^3).');
+      const e = parseInt(et.v, 10); if (e > 30) throw new MathErr('Stepen je prevelik (max 30).');
+      return { p: P.pow(b.p, e), t: `${b.t}^{${e}}`, k: 'atom' };
+    }
+    return b;
+  }
+  function unary() {
+    const t = peek();
+    if (t && t.k === '-') { pos++; const x = unary(); return { p: P.neg(x.p), t: '-' + (x.k === 'sum' ? paren(x.t) : x.t), k: 'neg' }; }
+    if (t && t.k === '+') { pos++; return unary(); }
+    return power();
+  }
+  function term() {
+    let a = unary();
+    for (;;) {
+      const t = peek(); if (!t) break;
+      if (t.k === '*') { pos++; a = mulNode(a, unary()); }
+      else if (t.k === '/') {
+        pos++; const b = unary();
+        if (P.deg(b.p) > 0) throw new MathErr('Dijeljenje je dozvoljeno samo brojem — brojilac i imenilac unesi u odvojena polja.');
+        if (!b.p.length) throw new MathErr('Dijeljenje nulom.');
+        a = { p: P.scale(a.p, ONE.div(b.p[0])), t: R`\frac{${a.t}}{${b.t}}`, k: 'atom' };
+      }
+      else if (t.k === 'num' || t.k === 'var' || t.k === '(') a = mulNode(a, power());
+      else break;
+    }
+    return a;
+  }
+  function expr() {
+    let a = term();
+    while (peek() && (peek().k === '+' || peek().k === '-')) {
+      const op = peek().k; pos++;
+      const b = term();
+      const bt = (b.k === 'neg' || b.k === 'sum') ? paren(b.t) : b.t;
+      a = { p: op === '+' ? P.add(a.p, b.p) : P.sub(a.p, b.p), t: a.t + (op === '+' ? '+' : '-') + bt, k: 'sum' };
+    }
+    return a;
+  }
+  const res = expr();
+  if (pos < toks.length) throw new MathErr('Višak znakova u izrazu — provjeri zapis.');
+  return { poly: P.norm(res.p), tex: res.t, kind: res.k };
+}
+function parseConst(src, def) {
+  if (def !== undefined && !normSrc(src)) return def;
+  const r = parsePoly(src, 'n');
+  if (P.deg(r.poly) > 0) throw new MathErr('Ovdje se unosi broj (bez n).');
+  return r.poly.length ? r.poly[0] : Z;
+}
+
+/* ---------- parser zbira stepena: c*b^(n+k) ---------- */
+function parseExpSum(src) {
+  const s = normSrc(src);
+  if (!s) throw new MathErr('Polje je prazno.');
+  const parts = []; let depth = 0, cur = '';
+  for (const ch of s) {
+    if (ch === '(') depth++; if (ch === ')') depth--;
+    if ((ch === '+' || ch === '-') && depth === 0 && cur !== '' && !/[*^]$/.test(cur)) { parts.push(cur); cur = ch; }
+    else cur += ch;
+  }
+  parts.push(cur);
+  const NUM = R`\d+(?:\.\d+)?(?:/\d+)?`;
+  const reT = new RegExp(`^([+-])?(?:(${NUM})\\*)?(?:(${NUM})|\\((-?${NUM})\\))\\^(?:n|\\(n(?:([+-])(\\d+))?\\))$`);
+  const reC = new RegExp(`^([+-])?(${NUM})$`);
+  const terms = [];
+  for (const part of parts) {
+    let m = reT.exec(part);
+    if (m) {
+      let c = m[2] ? qFromStr(m[2]) : ONE; if (m[1] === '-') c = c.neg();
+      const b = m[3] ? qFromStr(m[3]) : (m[4].startsWith('-') ? qFromStr(m[4].slice(1)).neg() : qFromStr(m[4]));
+      const k = m[5] ? (m[5] === '-' ? -1 : 1) * parseInt(m[6], 10) : 0;
+      if (b.isZero()) throw new MathErr('Osnova ne smije biti 0.');
+      terms.push({ c, b, k }); continue;
+    }
+    m = reC.exec(part);
+    if (m) { let c = qFromStr(m[2]); if (m[1] === '-') c = c.neg(); terms.push({ c, b: ONE, k: 0, konst: true }); continue; }
+    throw new MathErr(`Ne razumijem član „${part}“. Piši npr. 3*2^(n+1), (-2)^n ili 5.`);
+  }
+  const tex = terms.map((t, i) => signedTex(t.c, expTermTex(t), i === 0, !!t.konst)).join('');
+  return { terms, tex };
+}
+function baseTex(b) { return (b.sign() < 0 || !b.isInt()) ? paren(b.tex()) : b.tex(); }
+function expTex(k) { return k === 0 ? 'n' : k > 0 ? `n+${k}` : `n-${-k}`; }
+function expTermTex(t) { return `${baseTex(t.b)}^{${expTex(t.k)}}`; }
+function signedTex(c, body, first, konst) {
+  const neg = c.sign() < 0, a = c.abs();
+  let t = konst ? a.tex() : (a.isOne() ? body : a.tex() + R`\cdot ` + body);
+  return first ? (neg ? '-' : '') + t : (neg ? ' - ' : ' + ') + t;
+}
+function groupExp(terms) {
+  const map = new Map();
+  for (const t of terms) { const key = t.b.str(); const A = t.c.mul(t.b.pow(t.k)); if (map.has(key)) map.get(key).A = map.get(key).A.add(A); else map.set(key, { b: t.b, A }); }
+  return [...map.values()].filter(g => !g.A.isZero()).sort((x, y) => y.b.abs().cmp(x.b.abs()) || y.b.cmp(x.b));
+}
+function groupTex(g, v = 'n') {
+  if (!g.length) return '0';
+  return g.map((x, i) => signedTex(x.A, x.b.isOne() ? '' : `${baseTex(x.b)}^{${v}}`, i === 0, x.b.isOne())).join('');
+}
+
+/* ---------- limes količnika polinoma ---------- */
+function ratLimit(A, B) {
+  if (!A.length) return { res: Res.num(Z), kase: 'zero' };
+  const dA = P.deg(A), dB = P.deg(B), la = P.lead(A), lb = P.lead(B);
+  if (dA === dB) return { res: Res.num(la.div(lb)), kase: 'eq', dA, dB, la, lb };
+  if (dA < dB) return { res: Res.num(Z), kase: 'lt', dA, dB, la, lb };
+  return { res: Res.inf(la.div(lb).sign()), kase: 'gt', dA, dB, la, lb };
+}
+function ratExplain(A, B, v = 'n', nameA = 'brojioca', nameB = 'imenioca') {
+  const r = ratLimit(A, B);
+  if (r.kase === 'zero') return { r, txt: 'Brojilac je identički jednak 0, pa je i limes 0.' };
+  const mA = coefMon(r.la, npow(q(r.dA), v)), mB = coefMon(r.lb, npow(q(r.dB), v));
+  let txt = `Najveći stepen ${nameA}: $${mA}$, a ${nameB}: $${mB}$. `;
+  if (r.kase === 'eq') txt += `Stepeni su jednaki, pa je limes količnik vodećih koeficijenata: $\\frac{${r.la.tex()}}{${r.lb.tex()}} = ${r.res.q.tex()}$.`;
+  else if (r.kase === 'lt') txt += `Stepen ${nameA} je manji, pa količnik teži $0$.`;
+  else txt += `Stepen ${nameA} je veći, pa količnik teži $${resTex(r.res)}$ (znak određuju vodeći koeficijenti).`;
+  return { r, txt };
+}
+const WHY_RAT = 'Pravilo za količnik polinoma dobija se izvlačenjem najvećeg stepena iz brojioca i imenioca: svi ostali članovi postaju oblika c/n^k i teže 0. Ostaje n^(p−q)·(a/b): ako je p=q to je a/b, ako je p<q to je 0, a ako je p>q to je ±∞.';
+
+function step(title, hint, body, why) { return { title, hint, body, why }; }
+const LIM = R`\lim_{n\to\infty}`;
+
+/* ======================= ŠABLONI ======================= */
+
+/* T1 — količnik polinoma */
+function solveRational(v) {
+  const N = parsePoly(v.num, 'n'), D = parsePoly(v.den, 'n');
+  if (!D.poly.length) throw new MathErr('Imenilac je identički 0.');
+  const problem = R`${LIM}\frac{${N.tex}}{${D.tex}}`; CUR.problem = problem;
+  const Np = N.poly, Dp = D.poly, steps = [];
+  if (!Np.length) {
+    steps.push(step('Brojilac je nula', 'Sredi brojilac.', 'Brojilac je identički jednak $0$, pa je svaki član niza $0$.', 'Niz čiji su svi članovi 0 teži 0.'));
+    return { problem, steps, result: Res.num(Z), numeric: n => 0 };
+  }
+  const p = P.deg(Np), qd = P.deg(Dp), a = P.lead(Np), b = P.lead(Dp);
+  const indet = p >= 1 && qd >= 1;
+  steps.push(step('Najveći stepeni',
+    'Nađi najveći stepen od n u brojiocu i u imeniocu, zajedno sa njihovim koeficijentima.',
+    `U brojiocu je najveći stepen $${npow(q(p)) || '1'}$ (vodeći koeficijent $${a.tex()}$), a u imeniocu $${npow(q(qd)) || '1'}$ (vodeći koeficijent $${b.tex()}$).` +
+    (indet ? ` Direktnim uvrštavanjem dobijamo oblik $\\frac{\\infty}{\\infty}$ — neodređen oblik, pa izraz moramo transformisati.` : ''),
+    'Kad n→∞, član sa najvećim stepenom raste neuporedivo brže od ostalih (za n = 1000: n³ = 10⁹, a n² = 10⁶). Zato on određuje ponašanje cijelog polinoma. Oblik ∞/∞ je neodređen: rezultat može biti bilo šta (0, broj ili ∞), zavisno od toga koji dio brže raste.'));
+  const fr = R`\frac{${bracketTex(Np, p)}}{${bracketTex(Dp, qd)}}`;
+  let after;
+  if (p === qd) after = fr; else if (p > qd) after = `${npow(q(p - qd))}\\cdot ${fr}`; else after = R`\frac{1}{${npow(q(qd - p))}}\cdot ${fr}`;
+  steps.push(step('Izvlačenje najvećeg stepena',
+    'Izvuci najveći stepen ispred zagrade, posebno u brojiocu i u imeniocu.',
+    `$$\\frac{${N.tex}}{${D.tex}} = \\frac{${npow(q(p)) || '1'}\\left(${bracketTex(Np, p)}\\right)}{${npow(q(qd)) || '1'}\\left(${bracketTex(Dp, qd)}\\right)} = ${after}$$`,
+    'Izvlačenjem n^p svaki ostali član postaje oblika c/n^k (k ≥ 1). Za takve članove znamo limes: teže 0. Ovo je isto što i dijeljenje brojioca i imenioca najvećim stepenom.'));
+  steps.push(step('Članovi oblika c/nᵏ teže nuli',
+    'Šta se dešava sa razlomcima c/nᵏ kad n→∞?',
+    `Svaki razlomak $\\frac{c}{n^k}$ teži $0$, pa zagrada u brojiocu teži $${a.tex()}$, a zagrada u imeniocu $${b.tex()}$.`,
+    'Standardni limes: lim 1/n^k = 0 za k > 0. Konstanta puta niz koji teži 0 i dalje teži 0, a limes zbira je zbir limesa (kad svi postoje).'));
+  let res, txt, why;
+  if (p === qd) { res = Res.num(a.div(b)); txt = `$$L = \\frac{${a.tex()}}{${b.tex()}} = ${res.q.tex()}$$`; why = 'Stepeni su jednaki, pa se n^p i n^q skrate. Ostaje količnik vodećih koeficijenata.'; }
+  else if (p < qd) { res = Res.num(Z); txt = `Faktor $\\frac{1}{${npow(q(qd - p))}} \\to 0$, a razlomak teži $\\frac{${a.tex()}}{${b.tex()}}$, pa je $$L = 0\\cdot\\frac{${a.tex()}}{${b.tex()}} = 0$$`; why = 'Imenilac raste brže od brojioca. Proizvod niza koji teži 0 i niza koji teži konačnom broju teži 0.'; }
+  else { res = Res.inf(a.div(b).sign()); txt = `Faktor $${npow(q(p - qd))} \\to +\\infty$, a razlomak teži $\\frac{${a.tex()}}{${b.tex()}}${a.div(b).sign() > 0 ? '>' : '<'}0$, pa je $$L = ${resTex(res)}$$`; why = 'Brojilac raste brže. Proizvod niza koji teži +∞ i niza koji teži broju različitom od nule je ±∞; znak je znak tog broja (a/b).'; }
+  steps.push(step('Zaključak', 'Uporedi stepene: jednaki, brojilac manji ili brojilac veći?', txt, why));
+  return { problem, steps, result: res, numeric: n => P.evalN(Np, n) / P.evalN(Dp, n), nVals: [10, 100, 1000, 10000] };
+}
+
+/* T2 — zbir stepena / zbir stepena */
+function dominant(g, where) {
+  if (!g.length) return null;
+  if (g.length > 1 && g[0].b.abs().eq(g[1].b.abs())) throw new Unsupported(`U ${where} su dva dominantna člana sa osnovama ${g[0].b.str()} i ${g[1].b.str()} (ista apsolutna vrijednost, suprotan znak) — ovaj slučaj je van šablona.`);
+  return g[0];
+}
+function solveExp(v) {
+  const N = parseExpSum(v.num), D = parseExpSum(v.den);
+  const problem = R`${LIM}\frac{${N.tex}}{${D.tex}}`; CUR.problem = problem;
+  const gN = groupExp(N.terms), gD = groupExp(D.terms);
+  if (!gD.length) throw new MathErr('Imenilac je identički 0.');
+  const steps = [];
+  const shifts = [...N.terms, ...D.terms].filter(t => t.k !== 0 && !t.konst).map(t => `$${baseTex(t.b)}^{${expTex(t.k)}} = ${baseTex(t.b)}^{${t.k}}\\cdot ${baseTex(t.b)}^{n}${t.k < 0 ? ' = ' + t.b.pow(t.k).tex() + '\\cdot ' + baseTex(t.b) + '^{n}' : ''}$`);
+  steps.push(step('Svedi sve na oblik c·bⁿ',
+    'Raspiši stepene oblika b^(n+k) kao b^k · bⁿ i saberi članove sa istom osnovom.',
+    (shifts.length ? 'Koristimo: ' + [...new Set(shifts)].join(', ') + '. ' : '') +
+    `Brojilac: $${groupTex(gN)}$, imenilac: $${groupTex(gD)}$.`,
+    'Pravilo za stepene: b^(n+k) = b^k · b^n. Tako svaki član ima oblik (broj)·(osnova)^n i članove možemo porediti po brzini rasta — brže raste onaj sa većom apsolutnom vrijednošću osnove.'));
+  if (!gN.length) {
+    steps.push(step('Brojilac je nula', 'Pogledaj brojilac.', 'Članovi u brojiocu se poništavaju, pa je brojilac $0$ i $L=0$.', 'Svi članovi niza su 0.'));
+    return { problem, steps, result: Res.num(Z), numeric: n => 0 };
+  }
+  const dN = dominant(gN, 'brojiocu'), dD = dominant(gD, 'imeniocu');
+  const BN = dN.b, BD = dD.b, A = dN.A, Dc = dD.A;
+  steps.push(step('Dominantni članovi',
+    'Koja osnova (po apsolutnoj vrijednosti) je najveća u brojiocu, a koja u imeniocu?',
+    `U brojiocu najbrže raste $${signedTex(A, BN.isOne() ? '' : baseTex(BN) + '^{n}', true, BN.isOne())}$, a u imeniocu $${signedTex(Dc, BD.isOne() ? '' : baseTex(BD) + '^{n}', true, BD.isOne())}$.`,
+    'Ako je |b| < |B|, onda je |b/B| < 1, pa (b/B)^n → 0 (geometrijski niz). Zato su članovi sa manjom osnovom zanemarljivi u odnosu na B^n.'));
+  const brTex = (g, B) => g.map((x, i) => i === 0 ? x.A.tex() : signedTex(x.A, R`\left(${x.b.div(B).tex()}\right)^{n}`, false, false)).join('');
+  const powT = B => B.isOne() ? '' : `${baseTex(B)}^{n}`;
+  let ratio = '';
+  if (!BN.eq(BD)) ratio = R`\left(${BN.div(BD).tex()}\right)^{n}\cdot `;
+  steps.push(step('Izvlačenje dominantnog stepena',
+    'Izvuci dominantni stepen ispred zagrade i u brojiocu i u imeniocu.',
+    `$$\\frac{${N.tex}}{${D.tex}} = \\frac{${powT(BN)}\\left(${brTex(gN, BN)}\\right)}{${powT(BD)}\\left(${brTex(gD, BD)}\\right)} = ${ratio}\\frac{${brTex(gN, BN)}}{${brTex(gD, BD)}}$$`,
+    'Isti trik kao kod polinoma: izvlačenjem najbržeg člana svi ostali postaju stepeni (b/B)^n sa |b/B| < 1, a za njih znamo da teže 0.'));
+  steps.push(step('Limes zagrada',
+    'Šta se dešava sa (b/B)ⁿ kad je |b/B| < 1?',
+    `Svi stepeni $\\left(\\frac{b}{B}\\right)^n$ u zagradama teže $0$, pa zagrada u brojiocu teži $${A.tex()}$, a u imeniocu $${Dc.tex()}$.`,
+    'Standardni limes geometrijskog niza: qⁿ → 0 za |q| < 1.'));
+  let res, txt, why;
+  const AD = A.div(Dc);
+  if (BN.eq(BD)) { res = Res.num(AD); txt = `Dominantni stepeni su isti i skrate se: $$L = \\frac{${A.tex()}}{${Dc.tex()}} = ${AD.tex()}$$`; why = 'Kad brojilac i imenilac imaju istu dominantnu osnovu, ona se skrati i ostaje količnik koeficijenata.'; }
+  else if (BN.abs().cmp(BD.abs()) < 0) { res = Res.num(Z); txt = `Kako je $\\left|${BN.div(BD).tex()}\\right| < 1$, faktor $\\left(${BN.div(BD).tex()}\\right)^n \\to 0$, pa je $$L = 0$$`; why = 'Imenilac raste brže od brojioca: (B_N/B_D)^n → 0, a razlomak teži konačnom broju.'; }
+  else if (BN.abs().eq(BD.abs())) { res = Res.dne('osciluje'); txt = `Faktor $(-1)^n$ naizmjenično daje $\\pm1$: parni članovi teže $${AD.tex()}$, a neparni $${AD.neg().tex()}$. Dva različita limesa podnizova $\\Rightarrow$ $$L \\text{ ne postoji}$$`; why = 'Ako dva podniza imaju različite limese, niz nema limes (ima dvije tačke nagomilavanja).'; }
+  else {
+    const rr = BN.div(BD);
+    if (rr.sign() > 0) { res = Res.inf(AD.sign()); txt = `Kako je $${rr.tex()} > 1$, faktor $\\left(${rr.tex()}\\right)^n \\to +\\infty$, a razlomak teži $${AD.tex()}$, pa je $$L = ${resTex(res)}$$`; why = 'Brojilac raste brže od imenioca; geometrijski niz sa q > 1 teži +∞, a znak određuje konstanta A/D.'; }
+    else { res = Res.dne('osciluje'); txt = `Kako je $${rr.tex()} < -1$, faktor $\\left(${rr.tex()}\\right)^n$ naizmjenično ide ka $+\\infty$ i $-\\infty$, pa $$L \\text{ ne postoji}$$`; why = 'Geometrijski niz sa q ≤ −1 nema limes: parni članovi su pozitivni i rastu, neparni negativni i padaju.'; }
+  }
+  steps.push(step('Zaključak', 'Uporedi dominantne osnove brojioca i imenioca.', txt, why));
+  const sumN = (g, B, n) => g.reduce((s, x) => s + x.A.toNumber() * Math.pow(x.b.div(B).toNumber(), n), 0);
+  return { problem, steps, result: res, nVals: [5, 10, 20, 50], numeric: n => Math.pow(BN.div(BD).toNumber(), n) * sumN(gN, BN, n) / sumN(gD, BD, n) };
+}
+
+/* T3 — n-ti korijen zbira stepena */
+function solveNRoot(v) {
+  const S = parseExpSum(v.inner);
+  const problem = R`${LIM}\sqrt[n]{${S.tex}}`; CUR.problem = problem;
+  const g = groupExp(S.terms);
+  if (!g.length) throw new MathErr('Izraz pod korijenom je 0.');
+  if (g.some(x => x.b.sign() <= 0 || x.A.sign() <= 0)) throw new Unsupported('Šablon radi samo kad su sve osnove i svi koeficijenti pozitivni (tada je zbir pozitivan i sendvič radi).');
+  const B = g[0].b, C = g[0].A, Ssum = g.reduce((s, x) => s.add(x.A), Z);
+  const BT = B.isOne() ? '' : `${baseTex(B)}^{n}`;
+  const steps = [];
+  steps.push(step('Najveća osnova',
+    'Raspiši članove kao c·bⁿ i nađi najveću osnovu.',
+    `Pod korijenom je $${groupTex(g)}$. Najveća osnova je $B = ${B.tex()}$.`,
+    'Pod n-tim korijenom najveći stepen „nosi“ cijeli zbir: kad izvučemo Bⁿ ispod korijena, dobijemo B·ⁿ√(nešto ograničeno), a ⁿ√ ograničene pozitivne veličine teži 1.'));
+  steps.push(step('Donja granica',
+    'Izostavi sve sabirke osim dominantnog.',
+    `Svi sabirci su pozitivni, pa je $$\\sqrt[n]{${S.tex}} \\ \\ge\\ \\sqrt[n]{${C.isOne() ? '' : C.tex() + R`\cdot `}${BT || '1'}} = ${C.isOne() ? '' : R`\sqrt[n]{${C.tex()}}\cdot `}${B.tex()}$$`,
+    'Ako iz zbira pozitivnih brojeva izbacimo neke sabirke, zbir se smanji. Funkcija ⁿ√x je rastuća, pa se i korijen smanji.'));
+  steps.push(step('Gornja granica',
+    'Zamijeni svaku osnovu najvećom osnovom B.',
+    `Pošto je svaka osnova $b \\le B$, važi $b^n \\le B^n$, pa je $$\\sqrt[n]{${S.tex}} \\ \\le\\ \\sqrt[n]{${Ssum.tex()}\\cdot ${BT || '1'}} = \\sqrt[n]{${Ssum.tex()}}\\cdot ${B.tex()}$$`,
+    'Povećavanjem svakog sabirka povećava se i zbir. Ovako dobijemo granicu koja ima isti oblik kao donja.'));
+  steps.push(step('Sendvič (dva policajca)',
+    'Kojem broju teži ⁿ√a za konstantu a > 0?',
+    `Kako $\\sqrt[n]{a}\\to 1$ za svako $a>0$, obje granice teže $${B.tex()}$. Po teoremi o dva policajca: $$L = ${B.tex()}$$`,
+    'Standardni limes: ⁿ√a = a^(1/n) → a^0 = 1. Teorema o dva policajca: ako je x_n ≤ a_n ≤ y_n i x_n, y_n → L, onda i a_n → L.'));
+  return { problem, steps, result: Res.num(B), nVals: [5, 10, 50, 200], numeric: n => B.toNumber() * Math.pow(g.reduce((s, x) => s + x.A.toNumber() * Math.pow(x.b.div(B).toNumber(), n), 0), 1 / n) };
+}
+
+/* T4 — suma polinoma / polinom */
+const SUMF = [
+  { p: [Z, ONE], tex: R`\sum_{k=1}^{n} 1 = n` },
+  { p: [Z, q(1, 2), q(1, 2)], tex: R`\sum_{k=1}^{n} k = \frac{n(n+1)}{2}` },
+  { p: [Z, q(1, 6), q(1, 2), q(1, 3)], tex: R`\sum_{k=1}^{n} k^2 = \frac{n(n+1)(2n+1)}{6}` },
+  { p: [Z, Z, q(1, 4), q(1, 2), q(1, 4)], tex: R`\sum_{k=1}^{n} k^3 = \left(\frac{n(n+1)}{2}\right)^2` }
+];
+function solveSum(v) {
+  const T = parsePoly(v.term, 'k'), Tn = parsePoly(v.term, 'k', 'n'), D = parsePoly(v.den, 'n');
+  const k0 = parseInt(v.k0, 10);
+  if (!(k0 === 0 || k0 === 1)) throw new MathErr('Početni indeks mora biti 0 ili 1.');
+  if (!D.poly.length) throw new MathErr('Imenilac je identički 0.');
+  const p = T.poly;
+  if (!p.length) throw new MathErr('Opšti član je 0.');
+  if (P.deg(p) > 3) throw new Unsupported('Šablon pokriva opšti član stepena najviše 3 (formule za Σk, Σk², Σk³).');
+  const t = i => P.evalQ(p, q(i)).tex();
+  const lastT = (Tn.kind === 'sum' || Tn.kind === 'neg') ? paren(Tn.tex) : Tn.tex;
+  const written = `${t(k0)} + ${t(k0 + 1)} + ${t(k0 + 2)} + \\dots + ${lastT}`;
+  const problem = R`${LIM}\frac{${written}}{${D.tex}}`; CUR.problem = problem;
+  const steps = [];
+  steps.push(step('Zapis preko Σ',
+    'Prepoznaj opšti član sume (pravilo po kom nastaju sabirci).',
+    `$$${written} = \\sum_{k=${k0}}^{n} ${(T.kind === 'sum' || T.kind === 'neg') ? paren(T.tex) : T.tex}$$`,
+    'Sabirci nastaju uvrštavanjem k = ' + k0 + ', ' + (k0 + 1) + ', …, n u opšti član. Važno: broj sabiraka raste sa n, pa NE smijemo računati limes svakog sabirka posebno — prvo sumu svedemo na zatvoren oblik.'));
+  const used = [];
+  let lin = '', first = true;
+  for (let j = P.deg(p); j >= 0; j--) { const c = p[j] || Z; if (c.isZero()) continue; used.push(j); lin += signedTerm(c, j === 0 ? R`\sum 1` : (j === 1 ? R`\sum k` : R`\sum k^{${j}}`), first); first = false; }
+  steps.push(step('Razbijanje na poznate sume',
+    'Raširi opšti član i iskoristi da se suma „dijeli“ po sabircima.',
+    `$$\\sum_{k=${k0}}^{n}\\left(${P.tex(p, 'k')}\\right) = ${lin}$$` + (k0 === 0 ? `<br>(Sume idu od $k=0$; član za $k=0$ je $${t(0)}$.)` : ''),
+    'Linearnost sume: Σ(a·x_k + b·y_k) = a·Σx_k + b·Σy_k. Tako svaku sumu računamo po poznatoj formuli.'));
+  steps.push(step('Formule za sume',
+    'Prisjeti se formula za Σk, Σk², Σk³.',
+    used.slice().reverse().map(j => `$$${SUMF[j].tex}$$`).join(''),
+    'Ove formule se dokazuju matematičkom indukcijom i treba ih znati (vidi tab „Pravila i pojmovi“). Za limes je bitan samo vodeći član: Σk^j ≈ n^(j+1)/(j+1).'));
+  let S = []; for (let j = 0; j <= P.deg(p); j++) S = P.add(S, P.scale(SUMF[j].p, p[j] || Z));
+  if (k0 === 0) S = P.add(S, P.c(p[0] || Z));
+  steps.push(step('Zatvoren oblik sume',
+    'Uvrsti formule i sredi polinom po n.',
+    `$$S_n = ${P.tex(S)}$$`,
+    'Kad uvrstimo formule dobijemo običan polinom po n. Za limes bi bio dovoljan i samo vodeći član, ali ovako vidimo i tačan oblik.'));
+  const ex = ratExplain(S, D.poly);
+  steps.push(step('Limes količnika polinoma',
+    'Uporedi najveće stepene brojioca i imenioca.',
+    `$$L = ${LIM}\\frac{${P.tex(S)}}{${D.tex}}$$ ` + ex.txt + ` $$L = ${resTex(ex.r.res)}$$`,
+    WHY_RAT));
+  return { problem, steps, result: ex.r.res, nVals: [10, 100, 1000, 10000], numeric: n => { let s = 0; for (let k = k0; k <= n; k++) s += P.evalN(p, k); return s / P.evalN(D.poly, n); } };
+}
+
+/* T5 — teleskopske sume */
+function solveTele(v) {
+  const c = parseConst(v.c, ONE);
+  if (c.isZero()) throw new MathErr('Koeficijent c ne smije biti 0.');
+  const steps = [];
+  if (v.variant === 'kfact') {
+    const den = c.isOne() ? '(n+1)!' : c.tex() + '(n+1)!';
+    const problem = R`${LIM}\frac{1\cdot 1! + 2\cdot 2! + \dots + n\cdot n!}{${den}}`; CUR.problem = problem;
+    steps.push(step('Trik: k·k! kao razlika',
+      'Napiši k kao (k+1) − 1.',
+      R`$$k\cdot k! = \big((k+1)-1\big)k! = (k+1)\cdot k! - k! = (k+1)! - k!$$`,
+      'Po definiciji faktorijela (k+1)! = (k+1)·k!. Cilj je da svaki sabirak bude razlika dva uzastopna člana — tada se suma „sklopi kao teleskop“.'));
+    steps.push(step('Teleskopska suma',
+      'Ispiši nekoliko sabiraka i pogledaj šta se poništava.',
+      R`$$\sum_{k=1}^{n} k\cdot k! = (2!-1!) + (3!-2!) + \dots + \big((n+1)!-n!\big) = (n+1)! - 1$$`,
+      'Svaki član se pojavi jednom sa plusom i jednom sa minusom, osim prvog (−1!) i posljednjeg ((n+1)!). Zato ostaje (n+1)! − 1! = (n+1)! − 1.'));
+    const res = Res.num(ONE.div(c));
+    steps.push(step('Limes',
+      'Podijeli brojilac sa (n+1)!.',
+      `$$\\frac{(n+1)!-1}{${den}} = ${c.isOne() ? '' : R`\frac{1}{${c.tex()}}`}\\left(1 - \\frac{1}{(n+1)!}\\right) \\to ${res.q.tex()}$$`,
+      '1/(n+1)! → 0 jer (n+1)! → ∞. Limes zbira je zbir limesa.'));
+    return { problem, steps, result: res, nVals: [5, 10, 20, 50], numeric: n => { let s = 0, prod = 1; for (let k = n; k >= 1; k--) { prod *= (k + 1); s += k / prod; } return s / c.toNumber(); } };
+  }
+  const num = c.isOne() ? '1' : c.tex();
+  const problem = R`${LIM}\left(\frac{${num}}{1\cdot 2} + \frac{${num}}{2\cdot 3} + \dots + \frac{${num}}{n(n+1)}\right)`; CUR.problem = problem;
+  steps.push(step('Rastavljanje na parcijalne razlomke',
+    'Može li se 1/(k(k+1)) napisati kao razlika dva jednostavnija razlomka?',
+    R`$$\frac{1}{k(k+1)} = \frac{1}{k} - \frac{1}{k+1}$$`,
+    'Provjera: 1/k − 1/(k+1) = ((k+1) − k)/(k(k+1)) = 1/(k(k+1)). Razlika uzastopnih članova vodi na teleskopsku sumu.'));
+  steps.push(step('Teleskopska suma',
+    'Ispiši nekoliko sabiraka i pogledaj šta se poništava.',
+    R`$$\sum_{k=1}^{n}\left(\frac1k-\frac1{k+1}\right) = \left(1-\frac12\right)+\left(\frac12-\frac13\right)+\dots+\left(\frac1n-\frac1{n+1}\right) = 1-\frac{1}{n+1}$$`,
+    'Unutrašnji članovi se poništavaju, ostaju samo prvi i posljednji.'));
+  const res = Res.num(c);
+  steps.push(step('Limes', 'Kojem broju teži 1/(n+1)?',
+    `$$${c.isOne() ? '' : c.tex() + R`\cdot`}\\left(1-\\frac{1}{n+1}\\right) \\to ${c.tex()}$$`, '1/(n+1) → 0.'));
+  return { problem, steps, result: res, nVals: [10, 100, 1000, 10000], numeric: n => c.toNumber() * (1 - 1 / (n + 1)) };
+}
+
+/* T6 — sendvič za sumu c/√(a n² + b k) */
+function solveSandwich(v) {
+  const c = parseConst(v.c, ONE), a = parseConst(v.a), b = parseConst(v.b, ONE);
+  if (a.sign() <= 0 || b.sign() <= 0) throw new Unsupported('Šablon traži a > 0 i b > 0.');
+  if (c.isZero()) throw new MathErr('c ne smije biti 0.');
+  const inner = k => P.tex([k === 'n' ? Z : b.mul(k), Z, a]) ;
+  const innerN = P.tex([Z, b, a]);
+  const cT = c.tex();
+  const term = (t) => R`\frac{${cT}}{\sqrt{${t}}}`;
+  const problem = R`${LIM}\left(${term(inner(1))} + ${term(inner(2))} + \dots + ${term(innerN)}\right)`; CUR.problem = problem;
+  const steps = [];
+  const pos = c.sign() > 0;
+  steps.push(step('Broj i veličina sabiraka',
+    'Koliko ima sabiraka? Koji je najveći, a koji najmanji?',
+    `Ima tačno $n$ sabiraka ($k = 1, \\dots, n$). Kako $k$ raste, imenilac $\\sqrt{${P.tex([Z, Z, a])} + ${b.isOne() ? '' : b.tex()}k}$ raste, pa ${pos ? 'je najveći prvi, a najmanji posljednji sabirak' : '(uz c < 0) je najmanji prvi, a najveći posljednji sabirak'}.`,
+    'Ključna zamka: svaki sabirak teži 0, ali broj sabiraka raste. „Zbir nula-nizova je nula-niz“ važi samo za FIKSAN broj sabiraka — zato ovdje koristimo sendvič.'));
+  const lo = R`\frac{${c.isOne() ? '' : cT}n}{\sqrt{${innerN}}}`, hi = R`\frac{${c.isOne() ? '' : cT}n}{\sqrt{${inner(1)}}}`;
+  steps.push(step('Granice (dva policajca)',
+    'Zbir n sabiraka je između n·(najmanji) i n·(najveći).',
+    `$$${pos ? lo : hi} \\ \\le\\ S_n \\ \\le\\ ${pos ? hi : lo}$$`,
+    'Ako svaki od n sabiraka zamijenimo najmanjim, zbir se smanji; ako ga zamijenimo najvećim, zbir se poveća.'));
+  const s = surd(c.div(a), a, 2);   // c/√a = (c/a)·√a
+  steps.push(step('Limesi granica',
+    'Izvuci n² ispod korijena.',
+    `$$\\frac{n}{\\sqrt{${innerN}}} = \\frac{n}{n\\sqrt{${a.tex()} + \\frac{${b.tex()}}{n}}} \\to \\frac{1}{\\sqrt{${a.tex()}}}, \\qquad \\frac{n}{\\sqrt{${inner(1)}}} = \\frac{1}{\\sqrt{${a.tex()} + \\frac{${b.tex()}}{n^2}}} \\to \\frac{1}{\\sqrt{${a.tex()}}}$$`,
+    '√(n²·x) = n·√x za n > 0; razlomci b/n i b/n² teže 0, a korijen je neprekidna funkcija.'));
+  steps.push(step('Zaključak', 'Obje granice imaju isti limes — šta kaže teorema o dva policajca?',
+    `Obje granice teže $\\frac{${cT}}{\\sqrt{${a.tex()}}}$, pa je $$L = ${s.tex}$$`,
+    'Teorema o dva policajca: ako je x_n ≤ S_n ≤ y_n i x_n, y_n → L, onda i S_n → L.'));
+  return { problem, steps, result: Res.fromSurd(s), nVals: [10, 100, 1000, 10000], numeric: n => { let t = 0; const A = a.toNumber(), B = b.toNumber(); for (let k = 1; k <= n; k++) t += 1 / Math.sqrt(A * n * n + B * k); return c.toNumber() * t; } };
+}
+
+/* T7 — razlika korijena (racionalizacija) */
+function seriesMul(a, b, J) { const r = Array(J + 1).fill(Z); for (let i = 0; i <= J; i++) { if (a[i].isZero()) continue; for (let j = 0; i + j <= J; j++) r[i + j] = r[i + j].add(a[i].mul(b[j])); } return r; }
+function rootSeries(Pp, m, J) { // (P/(a n^D))^(1/m) = Σ c_j n^{-j}
+  const D = P.deg(Pp), a = P.lead(Pp);
+  const t = Array(J + 1).fill(Z); for (let j = 1; j <= Math.min(J, D); j++) t[j] = (Pp[D - j] || Z).div(a);
+  const s = q(1, m); let res = Array(J + 1).fill(Z); res[0] = ONE;
+  let tp = Array(J + 1).fill(Z); tp[0] = ONE; let bin = ONE;
+  for (let i = 1; i <= J; i++) { tp = seriesMul(tp, t, J); bin = bin.mul(s.sub(i - 1)).div(i); for (let j = 0; j <= J; j++) res[j] = res[j].add(bin.mul(tp[j])); }
+  return res;
+}
+function ratFactorTex(m, X, Y) { // racionalizacioni faktor za x−y (x=ᵐ√X…): tex
+  if (m === 2) return `${X} + ${Y}`;
+  const sq = t => /^\\sqrt/.test(t) || /^[a-z0-9]+$/i.test(t) ? (/^\\sqrt/.test(t) ? R`\left(${t}\right)^{2}` : `${t}^{2}`) : R`\left(${t}\right)^{2}`;
+  return `${sq(X)} + ${X}\\cdot ${Y} + ${sq(Y)}`;
+}
+function solveRoots(v) {
+  const r = parseConst(v.r, Z);
+  const m1 = parseInt(v.m1, 10), m2 = parseInt(v.m2, 10);
+  const A = parsePoly(v.p, 'n'), B = parsePoly(v.q, 'n');
+  const Pp = A.poly, Qp = B.poly;
+  const rt = (m, X) => rootTex(m, X.tex);
+  const left = rt(m1, A), rightRaw = rt(m2, B);
+  const right = (m2 === 1 && (B.kind === 'sum' || B.kind === 'neg')) ? paren(rightRaw) : rightRaw;
+  const rT = npow(r);
+  const problem = R`${LIM}${rT}${rT ? R`\,` : ''}\left(${left} - ${right}\right)`; CUR.problem = problem;
+  if (P.deg(Pp) < 1 || P.deg(Qp) < 1) throw new Unsupported('Oba izraza moraju sadržati n (stepen ≥ 1).');
+  if (P.lead(Pp).sign() < 0 || P.lead(Qp).sign() < 0) throw new Unsupported('Vodeći koeficijenti moraju biti pozitivni (inače korijen parnog reda nije definisan za velike n).');
+  const D1 = P.deg(Pp), D2 = P.deg(Qp), a1 = P.lead(Pp), a2 = P.lead(Qp);
+  const g1 = q(D1, m1), g2 = q(D2, m2);
+  const al1 = surd(ONE, a1, m1), al2 = surd(ONE, a2, m2);
+  const lt = (s, g) => (s.tex === '1' ? '' : s.tex) + npow(g);
+  const steps = [];
+  steps.push(step('Kako se ponaša svaki član',
+    'Izvuci najveći stepen ispod svakog korijena.',
+    `$$${left} = ${rootTex(m1, `${coefMon(a1, npow(q(D1)))}\\left(${bracketTex(P.scale(Pp, ONE.div(a1)), D1)}\\right)`)} \\approx ${lt(al1, g1)}$$` +
+    `$$${rightRaw} \\approx ${lt(al2, g2)}$$`,
+    'ᵐ√(a·n^D·(1+…)) = ᵐ√a · n^(D/m) · ᵐ√(1+…), a ᵐ√(1+…) → 1 jer svi članovi u zagradi osim 1 teže 0. Zato je vodeći dio korijena ᵐ√a·n^(D/m).'));
+  const finish = (coef, E, coefRes) => { // coef: broj (Q) ili surd; E: Q
+    if (E.sign() > 0) return Res.inf(coef.val !== undefined ? Math.sign(coef.val) : coef.sign());
+    if (E.sign() < 0) return Res.num(Z);
+    return coefRes;
+  };
+  const numericDirect = n => Math.pow(n, r.toNumber()) * (Math.pow(P.evalN(Pp, n), 1 / m1) - Math.pow(P.evalN(Qp, n), 1 / m2));
+  // --- slučaj A: različit red rasta ---
+  if (!g1.eq(g2)) {
+    const big = g1.cmp(g2) > 0, gm = big ? g1 : g2, alm = big ? al1 : al2, E = gm.add(r);
+    const sgn = big ? 1 : -1;
+    let res;
+    if (E.sign() > 0) res = Res.inf(sgn); else if (E.sign() < 0) res = Res.num(Z); else res = Res.fromSurd(big ? alm : surd(-1, big ? a1 : a2, big ? m1 : m2));
+    steps.push(step('Članovi ne rastu jednako brzo',
+      'Uporedi stepene n kod vodećih dijelova.',
+      `Stepen $n^{${g1.tex()}}$ ${big ? '>' : '<'} $n^{${g2.tex()}}$, pa ${big ? 'prvi' : 'drugi'} član dominira: izraz se ponaša kao $${sgn < 0 ? '-' : ''}${lt(alm, gm)}$` + (rT ? `, a uz faktor $${rT}$ kao $${sgn < 0 ? '-' : ''}${alm.tex === '1' ? '' : alm.tex}${npow(E) || '1'}$.` : '.'),
+      'Formalno je ovo oblik ∞ − ∞, ali kad jedan član raste brže, izvlačenjem njega ispred zagrade drugi postaje zanemarljiv (njihov količnik teži 0). Neodređenost se razrješava bez racionalizacije.'));
+    steps.push(step('Zaključak', 'Kuda ide dominantni član?', `$$L = ${resTex(res)}$$`, E.sign() > 0 ? 'Stepen n sa pozitivnim izložiocem teži +∞; znak je znak dominantnog člana.' : (E.sign() < 0 ? 'Ukupan izložilac od n je negativan, pa izraz teži 0.' : 'Ukupan izložilac je 0, pa ostaje koeficijent.')));
+    return { problem, steps, result: res, nVals: [10, 100, 1000, 10000], numeric: numericDirect };
+  }
+  const g = g1;
+  // --- slučaj B: isti red, različiti koeficijenti ---
+  if (Math.abs(al1.val - al2.val) > 1e-12 * Math.max(1, Math.abs(al1.val))) {
+    const diffVal = al1.val - al2.val, E = g.add(r);
+    let res;
+    if (E.sign() > 0) res = Res.inf(Math.sign(diffVal));
+    else if (E.sign() < 0) res = Res.num(Z);
+    else if (al1.q && al2.q) res = Res.num(al1.q.sub(al2.q));
+    else res = Res.sym(`${al1.tex} - ${al2.tex}`, diffVal);
+    steps.push(step('Vodeći članovi se ne poništavaju',
+      'Uporedi koeficijente uz isti stepen n.',
+      `Oba člana rastu kao $n^{${g.tex()}}$, ali sa različitim koeficijentima $${al1.tex} \\ne ${al2.tex}$. Izraz se ponaša kao $\\left(${al1.tex} - ${al2.tex}\\right)${npow(E) || ''}$.`,
+      'Nema prave neodređenosti: izvlačenjem n^g ispred zagrade dobije se n^g·(α₁ − α₂ + članovi koji teže 0), a α₁ − α₂ ≠ 0.'));
+    steps.push(step('Zaključak', 'Kuda ide izraz?', `$$L = ${resTex(res)}$$`, 'Proizvod (α₁−α₂) ≠ 0 i nⁱ sa pozitivnim izložiocem teži ±∞, znak određuje α₁ − α₂.'));
+    return { problem, steps, result: res, nVals: [10, 100, 1000, 10000], numeric: numericDirect };
+  }
+  // --- slučaj C: ∞ − ∞, racionalizacija ---
+  steps.push(step('Neodređen oblik ∞ − ∞',
+    'Vodeći članovi su isti — šta to znači?',
+    `Oba člana se ponašaju kao $${lt(al1, g)}$, pa se vodeći dijelovi poništavaju: oblik $\\infty - \\infty$. Potrebna je racionalizacija.`,
+    'Kad se vodeći članovi poništavaju, rezultat zavisi od „sitnijih“ članova ispod korijena. Racionalizacijom uklanjamo korijene iz brojioca i razlika postaje razlika polinoma, koju znamo da uporedimo.'));
+  if (m1 === m2) {
+    const m = m1, a = a1, Rp = P.sub(Pp, Qp);
+    const X = rootTex(m, A.tex), Y = rootTex(m, B.tex);
+    if (m > 1) steps.push(step('Racionalizacija',
+      m === 2 ? 'Pomnoži i podijeli sa zbirom korijena (a − b)(a + b) = a² − b².' : 'Pomnoži i podijeli sa a² + ab + b², jer (a − b)(a² + ab + b²) = a³ − b³.',
+      `$$${X} - ${Y} = \\frac{\\left(${A.tex}\\right) - \\left(${B.tex}\\right)}{${ratFactorTex(m, X, Y)}} = \\frac{${P.tex(Rp)}}{${ratFactorTex(m, X, Y)}}$$`,
+      m === 2 ? 'Formula a² − b² = (a − b)(a + b): množenjem razlike korijena njihovim zbirom korijeni nestaju iz brojioca (√x² = x).' : 'Formula a³ − b³ = (a − b)(a² + ab + b²): množenjem razlike kubnih korijena ovim izrazom korijeni nestaju iz brojioca.'));
+    const s = Rp.length ? P.deg(Rp) : null, rho = Rp.length ? P.lead(Rp) : null;
+    const E = s === null ? null : r.add(q(s)).sub(g.mul(q(m - 1)));
+    let res, txt;
+    const denBeh = m === 1 ? '1' : `${m}\\cdot ${lt(surd(ONE, a.pow(m - 1), m), g.mul(q(m - 1)))}`;
+    if (s === null) { res = Res.num(Z); txt = 'Brojilac je identički 0, pa je $L = 0$.'; }
+    else {
+      const coef = m === 1 ? surd(rho, ONE, 1) : surd(rho.div(a.mul(q(m))), a, m); // ρ/(m α^{m−1})
+      res = finish({ val: rho.toNumber() }, E, Res.fromSurd(coef));
+      txt = `Brojilac se ponaša kao $${coefMon(rho, npow(q(s)))}$, a imenilac ${m > 1 ? `(${m} pozitivna sabirka, svaki $\\approx ${lt(surd(ONE, a.pow(m - 1), m), g.mul(q(m - 1)))}$) kao $${denBeh}$` : 'je 1'}. ` +
+        (rT ? `Uz faktor $${rT}$ ukupan` : 'Ukupan') + ` izložilac od $n$ je $${E.tex()}$` +
+        (E.sign() > 0 ? `, pa $$L = ${resTex(res)}$$` : E.sign() < 0 ? `, pa $$L = 0$$` : `, pa ostaje količnik koeficijenata: $$L = \\frac{${rho.tex()}}{${denBeh.replace(/n\^\{0\}|\\sqrt\{n\}/g, '')}} = ${resTex(res)}$$`);
+    }
+    steps.push(step('Uporedi brojilac i imenilac',
+      'Nađi vodeći član brojioca i imenioca.',
+      txt,
+      'Svaki sabirak u imeniocu je proizvod korijena, a svaki korijen se ponaša kao α·n^g. Sabirci su pozitivni, pa se ne poništavaju — imenilac se ponaša kao m puta jedan sabirak. Formalno: brojilac i imenilac dijelimo najvećim stepenom imenioca.'));
+    return { problem, steps, result: res, nVals: [10, 100, 1000, 10000], numeric: n => { const X = Math.pow(P.evalN(Pp, n), 1 / m), Yv = Math.pow(P.evalN(Qp, n), 1 / m); let den = 0; for (let i = 0; i < m; i++) den += Math.pow(X, m - 1 - i) * Math.pow(Yv, i); return Math.pow(n, r.toNumber()) * P.evalN(Rp, n) / den; } };
+  }
+  // različiti redovi korijena
+  const alpha = qroot(a1, m1);
+  if (!alpha) throw new Unsupported('Korijeni različitog reda sa iracionalnim vodećim koeficijentom — van šablona.');
+  const yT = coefMon(alpha, npow(g));
+  steps.push(step('Dodaj i oduzmi vodeći član',
+    `Dodaj i oduzmi $${yT}$ da dobiješ dvije razlike istog tipa.`,
+    `$$${left} - ${rightRaw} = \\left(${left} - ${yT}\\right) + \\left(${yT} - ${rightRaw}\\right)$$`,
+    'Korijene različitog reda (npr. √ i ∛) ne možemo racionalisati jednim izrazom. Dodavanjem i oduzimanjem zajedničkog vodećeg člana (vrijednost se ne mijenja) dobijemo dva dijela, a svaki racionališemo posebno.'));
+  const piece = (m, X, Xp, sgn) => {
+    const Rp = P.sub(Xp, P.mono(alpha.pow(m), P.deg(Xp)));
+    const ym = coefMon(alpha.pow(m), npow(q(P.deg(Xp))));
+    const xr = rootTex(m, X.tex);
+    let tex;
+    if (m === 1) tex = `${X.tex} - ${yT} = ${P.tex(Rp)}`;
+    else tex = `${xr} - ${yT} = \\frac{${X.tex} - ${ym}}{${ratFactorTex(m, xr, yT)}} = \\frac{${P.tex(Rp)}}{${ratFactorTex(m, xr, yT)}}`;
+    if (!Rp.length) return { tex, c: null, E: null, Rp, m };
+    const s = P.deg(Rp), rho = P.lead(Rp);
+    const c = rho.div(q(m).mul(alpha.pow(m - 1))).mul(sgn);
+    const E = r.add(q(s)).sub(g.mul(q(m - 1)));
+    return { tex, c, E, Rp, m };
+  };
+  const p1 = piece(m1, A, Pp, 1), p2 = piece(m2, B, Qp, -1);
+  steps.push(step('Racionalizacija svakog dijela',
+    'Svaki dio racionališi kao razliku istog reda.',
+    `$$${p1.tex}$$ $$${p2.tex}$$`,
+    'Koristimo a² − b² = (a − b)(a + b) i a³ − b³ = (a − b)(a² + ab + b²). U brojiocu ostaje razlika polinoma, a imenilac se ponaša kao m·α^(m−1)·n^(g(m−1)).'));
+  const pieces = [p1, p2].filter(x => x.c);
+  const descr = [p1, p2].map((x, i) => x.c ? `${i === 0 ? 'prvi' : 'drugi'} dio${rT ? ` (sa faktorom $${rT}$)` : ''} $\\approx ${x.c.tex()}${npow(x.E) ? '\\cdot ' + npow(x.E) : ''}$` : `${i === 0 ? 'prvi' : 'drugi'} dio je $0$`).join('; ');
+  // tačan rezultat razvojem u red
+  const J = Math.min(14, g.add(r).floor() + 1);
+  const s1 = rootSeries(Pp, m1, J), s2 = rootSeries(Qp, m2, J);
+  let sres = Res.num(Z);
+  for (let j = 0; j <= J; j++) { const d = alpha.mul(s1[j].sub(s2[j])); if (d.isZero()) continue; const e = g.sub(q(j)).add(r); sres = e.sign() > 0 ? Res.inf(d.sign()) : e.sign() < 0 ? Res.num(Z) : Res.num(d); break; }
+  let res, txt, conclusive = true;
+  if (!pieces.length) { res = Res.num(Z); txt = 'Oba dijela su 0.'; }
+  else {
+    const maxE = pieces.reduce((m, x) => x.E.cmp(m) > 0 ? x.E : m, pieces[0].E);
+    const top = pieces.filter(x => x.E.eq(maxE)).reduce((s, x) => s.add(x.c), Z);
+    if (maxE.sign() < 0) { res = Res.num(Z); txt = 'Svi dijelovi imaju negativan izložilac od $n$, pa teže $0$: $$L = 0$$'; }
+    else if (maxE.sign() === 0) { res = Res.num(top); txt = `Dijelovi sa izložiocem $0$ daju konstante, ostali teže $0$: $$L = ${pieces.filter(x => x.E.eq(maxE)).map(x => x.c.tex()).join(' + ').replace(/\+ -/g, '- ')} = ${top.tex()}$$`; }
+    else if (!top.isZero()) { res = Res.inf(top.sign()); txt = `Dominantni dio ima pozitivan izložilac, pa $$L = ${resTex(res)}$$`; }
+    else { conclusive = false; res = sres; txt = `Vodeći dijelovi se ponovo poništavaju — potreban je precizniji razvoj (izvan uobičajenog postupka). Razvojem korijena u red dobija se $$L = ${resTex(sres)}$$`; }
+  }
+  steps.push(step('Spajanje dijelova',
+    'Odredi ponašanje svakog dijela i saberi.',
+    descr + '. ' + txt,
+    'Svaki dio se ponaša kao (vodeći koef. brojioca)/(m·α^(m−1))·nᴱ. Dijelovi sa negativnim izložiocem nestaju, sa izložiocem 0 daju konstantu, a sa pozitivnim teže ±∞.'));
+  const same = (x, y) => x.type === y.type && (x.type !== 'num' || x.q.eq(y.q)) && (x.type !== 'inf' || x.s === y.s);
+  const note = conclusive && !same(res, sres) ? 'Upozorenje: postupak i kontrolni razvoj se ne slažu — prijavi ovaj primjer.' : (!conclusive ? 'Rezultat je dobijen razvojem u red jer standardni postupak ovdje nije dovoljan.' : null);
+  const numeric = n => {
+    const pv = x => { const X = Math.pow(P.evalN(x.Pp, n), 1 / x.m), y = alpha.toNumber() * Math.pow(n, g.toNumber()); if (x.m === 1) return P.evalN(x.Rp, n); let den = 0; for (let i = 0; i < x.m; i++) den += Math.pow(X, x.m - 1 - i) * Math.pow(y, i); return P.evalN(x.Rp, n) / den; };
+    return Math.pow(n, r.toNumber()) * (pv({ ...p1, Pp }) - pv({ ...p2, Pp: Qp }));
+  };
+  return { problem, steps, result: res, note, nVals: [10, 100, 1000, 10000], numeric };
+}
+
+/* T8 — oblik 1^∞ : (P/Q)^R */
+function solveOneInf(v) {
+  const A = parsePoly(v.p, 'n'), B = parsePoly(v.q, 'n'), Rr = parsePoly(v.r, 'n');
+  const Pp = A.poly, Qp = B.poly, Rp = Rr.poly;
+  if (!Qp.length) throw new MathErr('Imenilac osnove je 0.');
+  if (!Pp.length) throw new Unsupported('Osnova je 0 — van šablona.');
+  const problem = R`${LIM}\left(\frac{${A.tex}}{${B.tex}}\right)^{${Rr.tex}}`; CUR.problem = problem;
+  const dp = P.deg(Pp), dq = P.deg(Qp), lp = P.lead(Pp), lq = P.lead(Qp);
+  if (lp.mul(lq).sign() < 0) throw new Unsupported('Osnova je negativna za velike n — van šablona.');
+  const dR = Rp.length ? P.deg(Rp) : -1;
+  const steps = [];
+  const beta = dp === dq ? Res.num(lp.div(lq)) : dp < dq ? Res.num(Z) : Res.inf(1);
+  const betaT = resTex(beta);
+  const expRes = dR >= 1 ? Res.inf(P.lead(Rp).sign()) : Res.num(Rp.length ? Rp[0] : Z);
+  steps.push(step('Odredi oblik',
+    'Izračunaj posebno limes osnove i limes eksponenta.',
+    `Osnova: $\\frac{${A.tex}}{${B.tex}} \\to ${betaT}$ (poređenje najvećih stepena). Eksponent: $${Rr.tex} \\to ${resTex(expRes)}$.` +
+    (beta.type === 'num' && beta.q.isOne() && dR >= 1 ? ' Dobijamo oblik $1^{\\infty}$ — neodređen oblik.' : ''),
+    'Oblik 1^∞ je neodređen: npr. (1 + 1/n)^n → e, (1 + 1/n²)^n → 1, (1 + 1/n)^(n²) → ∞. Iako osnova „teži 1“, ona nikad nije tačno 1, a eksponent je ogroman — rezultat zavisi od toga ko je brži.'));
+  if (!(beta.type === 'num' && beta.q.isOne())) {
+    let res, txt;
+    if (dR <= 0) {
+      const r0 = Rp.length ? Rp[0] : Z;
+      if (beta.type === 'inf') res = r0.sign() > 0 ? Res.inf(1) : r0.sign() < 0 ? Res.num(Z) : Res.num(ONE);
+      else if (beta.q.isZero()) res = r0.sign() > 0 ? Res.num(Z) : r0.sign() < 0 ? Res.inf(1) : Res.num(ONE);
+      else if (r0.isInt()) res = Res.num(beta.q.pow(Number(r0.n)));
+      else res = Res.sym(R`\left(${beta.q.tex()}\right)^{${r0.tex()}}`, Math.pow(beta.q.toNumber(), r0.toNumber()));
+      txt = `Eksponent je konstantan, pa je $$L = \\left(${betaT}\\right)^{${r0.tex()}} = ${resTex(res)}$$`;
+    } else {
+      const big = beta.type === 'inf' || beta.q.cmp(ONE) > 0, up = P.lead(Rp).sign() > 0;
+      res = (big === up) ? Res.inf(1) : Res.num(Z);
+      txt = `Osnova teži broju ${big ? 'većem od 1' : 'iz [0, 1)'}, a eksponent ka $${up ? '+' : '-'}\\infty$, pa je $$L = ${resTex(res)}$$`;
+    }
+    steps.push(step('Ovo nije oblik 1^∞', 'Osnova ne teži 1 — koristi pravilo za qˣ.', txt,
+      'Kad osnova teži broju q ≠ 1, nema neodređenosti: za q > 1 velik pozitivan eksponent daje +∞, a negativan 0; za 0 ≤ q < 1 obrnuto. Ako je eksponent konstanta, limes je q^konstanta.'));
+    const numeric = n => Math.exp(P.evalN(Rp, n) * Math.log(P.evalN(Pp, n) / P.evalN(Qp, n)));
+    return { problem, steps, result: res, nVals: [10, 100, 1000, 10000], numeric };
+  }
+  const Dd = P.sub(Pp, Qp);
+  if (!Dd.length || dR < 1) {
+    const res = Res.num(ONE);
+    steps.push(step('Zaključak', 'Osnova je tačno 1 ili eksponent ne raste.', `$$L = 1$$`, !Dd.length ? 'Osnova je identički 1, a 1 na bilo koji stepen je 1.' : 'Osnova teži 1, a eksponent konstanti, pa je L = 1^c = 1.'));
+    return { problem, steps, result: res, nVals: [10, 100, 1000], numeric: n => Math.exp(P.evalN(Rp, n) * Math.log1p(P.evalN(Dd, n) / P.evalN(Qp, n))) };
+  }
+  const DT = P.tex(Dd), QT = B.tex;
+  steps.push(step('Osnova kao 1 + (nešto što teži 0)',
+    'Napiši osnovu kao 1 + (P − Q)/Q.',
+    `$$\\frac{${A.tex}}{${QT}} = 1 + \\frac{${A.tex} - \\left(${QT}\\right)}{${QT}} = 1 + \\frac{${DT}}{${QT}}$$`,
+    'Cilj je doći do oblika (1 + 1/x_n)^(x_n), čiji limes znamo: e. Zato prvo izdvojimo „1 +“.'));
+  steps.push(step('Napravi oblik (1 + 1/x)ˣ',
+    'Okreni razlomak i u eksponentu pomnoži i podijeli istim izrazom.',
+    `Neka je $x_n = \\frac{${QT}}{${DT}} \\to ${Dd.length && P.deg(Dd) < dq ? (P.lead(Qp).div(P.lead(Dd)).sign() > 0 ? '+\\infty' : '-\\infty') : '\\infty'}$. Tada je $$\\left(1 + \\frac{1}{x_n}\\right)^{${Rr.kind === 'sum' ? paren(Rr.tex) : Rr.tex}} = \\left[\\left(1 + \\frac{1}{x_n}\\right)^{x_n}\\right]^{\\frac{${DT}}{${QT}}\\cdot ${Rr.kind === 'sum' ? paren(Rr.tex) : Rr.tex}}$$`,
+    'Standardni limes: (1 + 1/x_n)^(x_n) → e za svaki niz x_n → +∞ ili −∞. Množenje i dijeljenje eksponenta istim izrazom ne mijenja vrijednost.'));
+  const RD = P.mul(Rp, Dd);
+  const ex = ratExplain(RD, Qp);
+  steps.push(step('Limes novog eksponenta',
+    'Izračunaj limes količnika polinoma u eksponentu.',
+    `$$\\lambda = ${LIM}\\frac{${P.tex(RD)}}{${QT}}$$ ` + ex.txt,
+    WHY_RAT));
+  const lam = ex.r.res;
+  let res, txt;
+  if (lam.type === 'inf') { res = lam.s > 0 ? Res.inf(1) : Res.num(Z); txt = `$$L = e^{${resTex(lam)}} = ${resTex(res)}$$`; }
+  else if (lam.q.isZero()) { res = Res.num(ONE); txt = `$$L = e^{0} = 1$$`; }
+  else { res = Res.sym(lam.q.isOne() ? 'e' : `e^{${lam.q.tex()}}`, Math.exp(lam.q.toNumber())); txt = `$$L = ${resTex(res)}$$`; }
+  steps.push(step('Rezultat', 'Uglasta zagrada teži e — šta je e^λ?', txt,
+    'lim (a_n)^(b_n) = (lim a_n)^(lim b_n) kad je lim a_n = e > 0 i lim b_n = λ konačan (neprekidnost funkcije xʸ). Za λ = +∞ je e^∞ = +∞, a za λ = −∞ je e^(−∞) = 0.'));
+  return { problem, steps, result: res, nVals: [10, 100, 1000, 10000], numeric: n => Math.exp(P.evalN(Rp, n) * Math.log1p(P.evalN(Dd, n) / P.evalN(Qp, n))) };
+}
+
+/* T9 — ograničen niz × nula-niz */
+const BOUNDED = {
+  alt: { tex: '(-1)^{n}', M: () => ONE, osc: true, f: n => (n % 2 ? -1 : 1) },
+  cospi: { tex: R`\cos(n\pi)`, M: () => ONE, osc: true, f: n => (n % 2 ? -1 : 1), note: R`(jer je $\cos(n\pi) = (-1)^n$)` },
+  sin: { tex: R`\sin n`, M: () => ONE, osc: true, f: n => Math.sin(n) },
+  cos: { tex: R`\cos n`, M: () => ONE, osc: true, f: n => Math.cos(n) },
+};
+function solveBounded(v) {
+  const r = parseConst(v.r, Z);
+  const A = parsePoly(v.p || '1', 'n'), B = parsePoly(v.q, 'n');
+  if (!B.poly.length) throw new MathErr('Imenilac je 0.');
+  if (!A.poly.length) throw new MathErr('Brojilac je 0.');
+  let bd;
+  if (v.kind === 'ab') {
+    const a = parseConst(v.a, Z), b = parseConst(v.b, ONE);
+    const t = (a.isZero() ? '' : a.tex()) + (b.isZero() ? '' : (a.isZero() ? signedTex(b, '(-1)^{n}', true, false) : signedTex(b, '(-1)^{n}', false, false)));
+    bd = { tex: t || '0', M: () => a.abs().add(b.abs()), osc: !b.isZero(), f: n => a.toNumber() + b.toNumber() * (n % 2 ? -1 : 1), a, b, sum: !a.isZero() && !b.isZero() };
+  } else bd = BOUNDED[v.kind];
+  if (!bd) throw new MathErr('Izaberi ograničeni dio.');
+  const numParts = [npow(r), A.tex === '1' ? '' : ((A.kind === 'sum') ? paren(A.tex) : A.tex), bd.sum && (npow(r) || A.tex !== '1') ? paren(bd.tex) : bd.tex].filter(Boolean);
+  const problem = R`${LIM}\frac{${numParts.join(R`\,`)}}{${B.tex}}`; CUR.problem = problem;
+  const e = r.add(q(P.deg(A.poly))).sub(q(P.deg(B.poly)));
+  const xT = R`\frac{${[npow(r), A.tex === '1' && npow(r) ? '' : (A.kind === 'sum' && npow(r) ? paren(A.tex) : A.tex)].filter(Boolean).join(R`\,`)}}{${B.tex}}`;
+  const steps = [];
+  steps.push(step('Rastavi na ograničen dio i ostatak',
+    'Koji dio niza ostaje u fiksnim granicama?',
+    `Niz je proizvod $${bd.tex}$ i $x_n = ${xT}$. ${bd.note || ''} Važi $\\left|${bd.tex}\\right| \\le ${bd.M().tex()}$ za svako $n$.`,
+    'sin, cos i (−1)ⁿ uvijek su između −1 i 1, pa su ograničeni. Ograničeni nizovi ne moraju imati limes, ali ne mogu „pobjeći“ u beskonačnost.'));
+  const lead = P.lead(A.poly).div(P.lead(B.poly));
+  if (e.sign() < 0) {
+    steps.push(step('x_n teži nuli',
+      'Uporedi stepene n u brojiocu i imeniocu od x_n.',
+      `Ukupan izložilac od $n$ u $x_n$ je $${e.tex()} < 0$, pa $x_n \\to 0$.`,
+      'Isto pravilo kao kod količnika polinoma: kad imenilac raste brže, količnik teži 0.'));
+    steps.push(step('Teorema: ograničen × nula-niz',
+      'Šta je proizvod ograničenog niza i niza koji teži 0?',
+      `$$0 \\le \\left|a_n\\right| \\le ${bd.M().tex()}\\cdot\\left|x_n\\right| \\to 0 \\quad\\Rightarrow\\quad L = 0$$`,
+      'Ako je |b_n| ≤ M i x_n → 0, onda je |b_n·x_n| ≤ M|x_n| → 0, pa po teoremi o dva policajca b_n·x_n → 0. Pažnja: lim(b_n) ne mora postojati — ne smijemo pisati lim(b_n)·lim(x_n)!'));
+    return { problem, steps, result: Res.num(Z), nVals: [10, 100, 1000, 10000], numeric: n => bd.f(n) * Math.pow(n, r.toNumber()) * P.evalN(A.poly, n) / P.evalN(B.poly, n) };
+  }
+  if (e.sign() > 0) throw new Unsupported('Drugi faktor ne teži nuli (raste) — ovaj slučaj je van šablona.');
+  steps.push(step('x_n teži konstanti',
+    'Kojem broju teži x_n?',
+    `Ukupan izložilac od $n$ je $0$, pa $x_n \\to ${lead.tex()}$.`,
+    'Jednaki stepeni → količnik vodećih koeficijenata.'));
+  if (!bd.osc) {
+    const res = Res.num(lead.mul(bd.a));
+    steps.push(step('Zaključak', 'Ograničeni dio je konstantan.', `$$L = ${resTex(res)}$$`, 'Limes proizvoda je proizvod limesa.'));
+    return { problem, steps, result: res, nVals: [10, 100, 1000], numeric: n => bd.f(n) * P.evalN(A.poly, n) / P.evalN(B.poly, n) };
+  }
+  let txt;
+  if (v.kind === 'ab') { const p1 = bd.a.add(bd.b).mul(lead), p2 = bd.a.sub(bd.b).mul(lead); txt = `Za parne $n$ niz teži $${p1.tex()}$, a za neparne $${p2.tex()}$. Dvije različite tačke nagomilavanja $\\Rightarrow$ $$L \\text{ ne postoji}$$`; }
+  else if (v.kind === 'alt' || v.kind === 'cospi') txt = `Za parne $n$ niz teži $${lead.tex()}$, a za neparne $${lead.neg().tex()}$. Dvije različite tačke nagomilavanja $\\Rightarrow$ $$L \\text{ ne postoji}$$`;
+  else txt = `Niz $${bd.tex}$ nema limes (vrijednosti se gomilaju svuda u $[-1,1]$), a $x_n$ teži broju $\\ne 0$, pa $$L \\text{ ne postoji}$$`;
+  steps.push(step('Podnizovi', 'Pogledaj posebno parne i neparne članove.', txt,
+    'Ako dva podniza imaju različite limese, niz nema limes. Teorema „ograničen × nula-niz“ ovdje ne važi, jer x_n ne teži 0.'));
+  return { problem, steps, result: Res.dne('osciluje'), nVals: [10, 11, 100, 101, 1000, 1001], numeric: n => bd.f(n) * P.evalN(A.poly, n) / P.evalN(B.poly, n) };
+}
+
+/* T10 — određivanje a i b: lim_{x→±∞}(s√(Ax²+Bx+C) + kA·a·x + kB·b) = L */
+function solveParams(v) {
+  const sig = v.dir === '-' ? -1 : 1, s = v.s === '-' ? -1 : 1;
+  const Pr = parsePoly(v.poly, 'x');
+  const kA = parseConst(v.kA), kB = parseConst(v.kB), L = parseConst(v.L, Z);
+  if (P.deg(Pr.poly) !== 2 || P.lead(Pr.poly).sign() <= 0) throw new Unsupported('Ispod korijena mora biti kvadratni trinom sa pozitivnim koeficijentom uz x².');
+  if (kA.isZero() || kB.isZero()) throw new MathErr('Koeficijenti uz a i b ne smiju biti 0.');
+  const A = Pr.poly[2], Bc = Pr.poly[1] || Z;
+  const root = R`\sqrt{${Pr.tex}}`;
+  const termA = coefMon(kA, 'ax'), termB = coefMon(kB, 'b');
+  const expr = (s < 0 ? '-' : '') + root + (kA.sign() < 0 ? ' ' : ' + ') + termA + (kB.sign() < 0 ? ' ' : ' + ') + termB;
+  const problem = R`\lim_{x\to${sig > 0 ? '+' : '-'}\infty}\left(${expr}\right) = ${L.tex()}`; CUR.problem = problem;
+  const sqA = surd(ONE, A, 2);
+  const aVal = surd(q(-s * sig).div(kA), A, 2);
+  const cst = surd(q(s * sig).mul(Bc).div(A.mul(q(2))), A, 2);       // sσB/(2√A)
+  const bVal = ratPlusSurd(L.div(kB), surd(q(-s * sig).mul(Bc).div(A.mul(q(2))).div(kB), A, 2));
+  const steps = [];
+  steps.push(step('Ponašanje korijena',
+    `Izvuci x² ispod korijena; pazi: √(x²) = |x|${sig < 0 ? ', a za x → −∞ je |x| = −x' : ''}.`,
+    `$$${root} = |x|\\sqrt{${A.tex()} + \\frac{${Bc.tex()}}{x} + \\dots} \\approx ${sig > 0 ? '' : '-'}${sqA.tex === '1' ? '' : sqA.tex}x$$`,
+    'Ključno: √(x²) = |x|, a ne x. Za x → +∞ je |x| = x, a za x → −∞ je |x| = −x. Ovo je najčešća greška u ovim zadacima.'));
+  steps.push(step('Uslov 1: član uz x mora nestati',
+    'Ako član uz x ne nestane, limes je ±∞. Izjednači koeficijent uz x sa 0.',
+    `Izraz se ponaša kao $\\left(${s * sig < 0 ? '-' : ''}${sqA.tex} ${kA.sign() < 0 ? '' : '+'} ${coefMon(kA, 'a')}\\right)x + \\dots$, pa mora biti $$${s * sig < 0 ? '-' : ''}${sqA.tex} ${kA.sign() < 0 ? '' : '+'} ${coefMon(kA, 'a')} = 0 \\Rightarrow a = ${aVal.tex}$$`,
+    'Limes treba da bude konačan broj. Kad bi koeficijent uz x bio ≠ 0, izraz bi se ponašao kao (koef)·x → ±∞.'));
+  steps.push(step('Uslov 2: konstanta',
+    'Racionališi razliku korijena i linearnog člana.',
+    `$$${root} - \\left(${sig > 0 ? '' : '-'}${sqA.tex === '1' ? '' : sqA.tex}x\\right) = \\frac{${P.tex(Pr.poly.slice(0, 2), 'x')}}{${root} + ${sig > 0 ? '' : '\\left(-'}${sqA.tex === '1' ? '' : sqA.tex}x${sig > 0 ? '' : '\\right)'}} \\to ${cst.tex}$$` +
+    `Zato je limes cijelog izraza $${s < 0 ? '-' : ''}\\left(${cst.tex}\\right) ${kB.sign() < 0 ? '' : '+'} ${termB}$, i to mora biti $${L.tex()}$.`,
+    `Racionalizacija: (√X − Y)(√X + Y) = X − Y². Vodeći članovi x² se skrate, ostaje linearni član u brojiocu, a imenilac se ponaša kao 2√A·|x|. ${sig < 0 ? 'Za x → −∞ je |x| = −x, zato se mijenja znak.' : ''}`));
+  steps.push(step('Rješenje', 'Riješi linearnu jednačinu po b.',
+    `$$${s < 0 ? '-' : ''}\\left(${cst.tex}\\right) ${kB.sign() < 0 ? '' : '+'} ${termB} = ${L.tex()} \\Rightarrow b = ${bVal.tex}$$ $$a = ${aVal.tex},\\qquad b = ${bVal.tex}$$`,
+    'Dva uslova (koeficijent uz x jednak 0 i konstanta jednaka L) daju dvije jednačine za dvije nepoznate a i b.'));
+  const res = { type: 'params', a: aVal, b: bVal };
+  const numeric = x => s * Math.sqrt(P.evalN(Pr.poly, x)) + kA.toNumber() * aVal.val * x + kB.toNumber() * bVal.val;
+  return { problem, steps, result: res, nVals: [10, 100, 1000, 10000].map(x => x * sig), numeric, nLabel: 'x' };
+}
+
+/* ---------- unos odgovora studenta ---------- */
+function parseAnswer(src) {
+  let s = String(src || '').trim().toLowerCase().replace(/\s+/g, ' ');
+  if (!s) throw new MathErr('Unesi odgovor.');
+  if (/^(ne postoji|nepostoji|np|dne|ne postoji\.?)$/.test(s)) return { dne: true };
+  s = s.replace(/[−–]/g, '-').replace(/∞|beskona[cč]no|inf(inity)?/g, 'I').replace(/\s/g, '');
+  if (s === 'I' || s === '+I') return { v: Infinity };
+  if (s === '-I') return { v: -Infinity };
+  s = s.replace(/√/g, 'sqrt').replace(/π/g, 'pi').replace(/·|×/g, '*');
+  let i = 0;
+  const peek = () => s[i];
+  const num = () => { const m = /^\d+(\.\d+)?/.exec(s.slice(i)); if (!m) return null; i += m[0].length; return parseFloat(m[0]); };
+  function prim() {
+    if (s.startsWith('sqrt', i)) { i += 4; return Math.sqrt(prim()); }
+    if (s.startsWith('pi', i)) { i += 2; return Math.PI; }
+    if (peek() === 'e') { i++; return Math.E; }
+    if (peek() === '(') { i++; const v = ex(); if (peek() !== ')') throw new MathErr('Zagrade se ne zatvaraju.'); i++; return v; }
+    const n = num(); if (n === null) throw new MathErr('Ne razumijem odgovor. Primjeri: 2/3, -inf, e^2, sqrt(2)/2, ne postoji.'); return n;
+  }
+  function pw() { let b = prim(); if (peek() === '^') { i++; const e = un(); b = Math.pow(b, e); } return b; }
+  function un() { if (peek() === '-') { i++; return -un(); } if (peek() === '+') { i++; return un(); } return pw(); }
+  function tm() { let a = un(); for (;;) { const c = peek(); if (c === '*') { i++; a *= un(); } else if (c === '/') { i++; a /= un(); } else if (c && /[0-9(es]/.test(c) || s.startsWith('pi', i)) a *= pw(); else break; } return a; }
+  function ex() { let a = tm(); while (peek() === '+' || peek() === '-') { const o = s[i++]; const b = tm(); a = o === '+' ? a + b : a - b; } return a; }
+  const v = ex(); if (i < s.length) throw new MathErr('Ne razumijem odgovor. Primjeri: 2/3, -inf, e^2, sqrt(2)/2, ne postoji.');
+  return { v };
+}
+function checkAnswer(ans, res) {
+  const t = res.type;
+  if (ans.dne) return t === 'dne';
+  if (t === 'dne') return false;
+  const v = resVal(res);
+  if (!isFinite(v) || !isFinite(ans.v)) return v === ans.v;
+  return Math.abs(v - ans.v) <= 1e-9 * Math.max(1, Math.abs(v));
+}
+
+const SOLVERS = { rational: solveRational, exp: solveExp, nroot: solveNRoot, sum: solveSum, tele: solveTele, sandwich: solveSandwich, roots: solveRoots, oneinf: solveOneInf, bounded: solveBounded, params: solveParams };
+function solve(id, values) { CUR.problem = null; return SOLVERS[id](values); }
+
+
+</script>
+<script>
+(function () {
+'use strict';
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* ---------- definicije tipova ---------- */
+const TYPES = [
+  { id: 'rational', name: 'Količnik polinoma (∞/∞)', desc: 'Niz oblika P(n)/Q(n), gdje su P i Q polinomi po n.',
+    fields: [{ k: 'num', l: 'Brojilac P(n)', ph: '2n^2+3n-4', w: 1 }, { k: 'den', l: 'Imenilac Q(n)', ph: '3n^2-4n+1', w: 1 }],
+    presets: [['(2n²+3n−4)/(3n²−4n+1)', { num: '2n^2+3n-4', den: '3n^2-4n+1' }], ['(3−2n²)/(5n³+4)', { num: '3-2n^2', den: '5n^3+4' }], ['(n⁷−3n⁵+4)/(1−5n⁴)', { num: 'n^7-3n^5+4', den: '1-5n^4' }], ['(n+1)³/(2n³+n)', { num: '(n+1)^3', den: '2n^3+n' }]] },
+  { id: 'exp', name: 'Zbir stepena aⁿ / zbir stepena', desc: 'Brojilac i imenilac su zbirovi članova oblika c·b^(n+k) i konstanti. Piši npr. 3*2^(n+1) − (-2)^n + 5.',
+    fields: [{ k: 'num', l: 'Brojilac', ph: '2^(n+1)+3^(n+1)', w: 1 }, { k: 'den', l: 'Imenilac', ph: '2^n+3^n', w: 1 }],
+    presets: [['(2ⁿ⁺¹+3ⁿ⁺¹)/(2ⁿ+3ⁿ)', { num: '2^(n+1)+3^(n+1)', den: '2^n+3^n' }], ['(3ⁿ+(−2)ⁿ)/(3ⁿ⁺¹+(−2)ⁿ⁺¹)', { num: '3^n+(-2)^n', den: '3^(n+1)+(-2)^(n+1)' }], ['(2022ⁿ+3·2023ⁿ⁺¹)/(3·2022ⁿ⁺¹+2023ⁿ)', { num: '2022^n+3*2023^(n+1)', den: '3*2022^(n+1)+2023^n' }], ['(5ⁿ−4ⁿ)/(5ⁿ⁺¹+2)', { num: '5^n-4^n', den: '5^(n+1)+2' }]] },
+  { id: 'nroot', name: 'n-ti korijen zbira stepena', desc: 'ⁿ√(a₁ⁿ + a₂ⁿ + … ) sa pozitivnim osnovama — rješava se teoremom o dva policajca.',
+    fields: [{ k: 'inner', l: 'Izraz pod ⁿ√', ph: '1+5^n+9^n', w: 1 }],
+    presets: [['ⁿ√(1+5ⁿ+9ⁿ)', { inner: '1+5^n+9^n' }], ['ⁿ√(5ⁿ+7ⁿ)', { inner: '5^n+7^n' }], ['ⁿ√(2ⁿ+3ⁿ⁺¹)', { inner: '2^n+3^(n+1)' }]] },
+  { id: 'sum', name: 'Suma 1…n kroz polinom', desc: 'Količnik (zbir prvih n članova sa opštim članom f(k)) / Q(n), gdje je f polinom stepena ≤ 3.',
+    fields: [{ k: 'term', l: 'Opšti član f(k)', ph: 'k^2' }, { k: 'k0', l: 'k počinje od', opts: [['1', '1'], ['0', '0']] }, { k: 'den', l: 'Imenilac Q(n)', ph: 'n^3' }],
+    presets: [['(1+4+…+n²)/n³', { term: 'k^2', k0: '1', den: 'n^3' }], ['(1+8+…+n³)/n⁴', { term: 'k^3', k0: '1', den: 'n^4' }], ['(1²+3²+…+(2n+1)²)/n³', { term: '(2k+1)^2', k0: '0', den: 'n^3' }], ['(1+3+…+(2n−1))/n²', { term: '2k-1', k0: '1', den: 'n^2' }], ['(1·2+2·3+…+n(n+1))/n³', { term: 'k(k+1)', k0: '1', den: 'n^3' }]] },
+  { id: 'tele', name: 'Teleskopska suma', desc: 'Dva klasična teleskopska šablona: c/(k(k+1)) i (1·1!+…+n·n!)/(c(n+1)!).',
+    fields: [{ k: 'variant', l: 'Šablon', opts: [['harm', 'c/(1·2)+…+c/(n(n+1))'], ['kfact', '(1·1!+…+n·n!)/(c·(n+1)!)']] }, { k: 'c', l: 'c (broj)', ph: '1' }],
+    presets: [['1/(1·2)+…+1/(n(n+1))', { variant: 'harm', c: '1' }], ['(1·1!+…+n·n!)/(n+1)!', { variant: 'kfact', c: '1' }]] },
+  { id: 'sandwich', name: 'Sendvič: Σ c/√(an²+bk)', desc: 'Suma c/√(an²+b·1)+…+c/√(an²+b·n) — n sabiraka koji svaki teže 0.',
+    fields: [{ k: 'c', l: 'c (broj)', ph: '1' }, { k: 'a', l: 'a (broj > 0)', ph: '4' }, { k: 'b', l: 'b (broj > 0)', ph: '1' }],
+    presets: [['Σ 1/√(4n²+k)', { c: '1', a: '4', b: '1' }], ['Σ 1/√(n²+k)', { c: '1', a: '1', b: '1' }], ['Σ 1/√(2n²+k)', { c: '1', a: '2', b: '1' }]] },
+  { id: 'roots', name: 'Razlika korijena (∞ − ∞)', desc: 'nʳ·(ᵐ√P(n) − ᵏ√Q(n)), m, k ∈ {1, 2, 3}. Red 1 znači „bez korijena“ (npr. ∛(n⁶+n) − n²).',
+    fields: [{ k: 'r', l: 'faktor nʳ: r (broj)', ph: '0' }, { k: 'm1', l: 'Red 1. korijena', opts: [['2', '√ (2)'], ['3', '∛ (3)'], ['1', 'bez korijena']] }, { k: 'p', l: 'P(n)', ph: 'n^2+1' }, { k: 'm2', l: 'Red 2. korijena', opts: [['2', '√ (2)'], ['3', '∛ (3)'], ['1', 'bez korijena']] }, { k: 'q', l: 'Q(n)', ph: 'n^2' }],
+    presets: [['√(n+1) − √n', { r: '0', m1: '2', p: 'n+1', m2: '2', q: 'n' }], ['∛(n+3) − ∛(n−3)', { r: '0', m1: '3', p: 'n+3', m2: '3', q: 'n-3' }], ['n^(7/4)(∛(n⁶+n) − n²)', { r: '7/4', m1: '3', p: 'n^6+n', m2: '1', q: 'n^2' }], ['n(√(n²+1) − ∛(n³+n))', { r: '1', m1: '2', p: 'n^2+1', m2: '3', q: 'n^3+n' }], ['√(4n²+3n) − 2n', { r: '0', m1: '2', p: '4n^2+3n', m2: '1', q: '2n' }], ['∛(n³+2n²) − ∛(n³−2)', { r: '0', m1: '3', p: 'n^3+2n^2', m2: '3', q: 'n^3-2' }]] },
+  { id: 'oneinf', name: 'Oblik 1^∞ (broj e)', desc: '(P(n)/Q(n))^R(n), gdje su P, Q, R polinomi. Svodi se na (1 + 1/x)ˣ → e.',
+    fields: [{ k: 'p', l: 'Brojilac osnove P(n)', ph: '2n+3' }, { k: 'q', l: 'Imenilac osnove Q(n)', ph: '2n+1' }, { k: 'r', l: 'Eksponent R(n)', ph: '2n' }],
+    presets: [['((2n+3)/(2n+1))^(2n)', { p: '2n+3', q: '2n+1', r: '2n' }], ['((n−1)/n)^(−n)', { p: 'n-1', q: 'n', r: '-n' }], ['(1 − 1/(3n))ⁿ', { p: '3n-1', q: '3n', r: 'n' }], ['((n²+2)/(n²+1))^((n+1)²)', { p: 'n^2+2', q: 'n^2+1', r: '(n+1)^2' }], ['((n+1)/(n−1))ⁿ', { p: 'n+1', q: 'n-1', r: 'n' }]] },
+  { id: 'bounded', name: 'Ograničen × nula-niz', desc: 'b_n · nʳ·P(n)/Q(n), gdje je b_n ograničen: (−1)ⁿ, cos(nπ), sin n, cos n ili a + b(−1)ⁿ.',
+    fields: [{ k: 'kind', l: 'Ograničeni dio b_n', opts: [['ab', 'a + b·(−1)ⁿ'], ['alt', '(−1)ⁿ'], ['cospi', 'cos(nπ)'], ['sin', 'sin n'], ['cos', 'cos n']] }, { k: 'a', l: 'a (broj)', ph: '3', show: v => v.kind === 'ab' }, { k: 'b', l: 'b (broj)', ph: '1', show: v => v.kind === 'ab' }, { k: 'r', l: 'faktor nʳ: r (broj)', ph: '0' }, { k: 'p', l: 'P(n)', ph: '1' }, { k: 'q', l: 'Q(n)', ph: '7n' }],
+    presets: [['(3+(−1)ⁿ)/(7n)', { kind: 'ab', a: '3', b: '1', r: '0', p: '1', q: '7n' }], ['n^(4/5)·cos(nπ)/(2n+3)', { kind: 'cospi', r: '4/5', p: '1', q: '2n+3' }], ['n·sin n/(n²+1)', { kind: 'sin', r: '0', p: 'n', q: 'n^2+1' }], ['(−1)ⁿ·n/(n+1)', { kind: 'alt', r: '0', p: 'n', q: 'n+1' }]] },
+  { id: 'params', name: 'Odredi a i b (√ trinoma)', desc: 'lim_{x→±∞}(±√(Ax²+Bx+C) + kₐ·a·x + k_b·b) = L. Traže se parametri a i b.',
+    fields: [{ k: 'dir', l: 'x teži', opts: [['+', '+∞'], ['-', '−∞']] }, { k: 's', l: 'Znak ispred √', opts: [['+', '+'], ['-', '−']] }, { k: 'poly', l: 'Pod korijenom (po x)', ph: 'x^2-3x+2', w: 1 }, { k: 'kA', l: 'koef. uz a·x (broj)', ph: '-1' }, { k: 'kB', l: 'koef. uz b (broj)', ph: '1' }, { k: 'L', l: 'Limes L (broj)', ph: '0' }],
+    presets: [['√(x²−3x+2) − ax + b → 0', { dir: '+', s: '+', poly: 'x^2-3x+2', kA: '-1', kB: '1', L: '0' }], ['x→−∞: √(4x²−2024x+2023) − ax + b → −2023', { dir: '-', s: '+', poly: '4x^2-2024x+2023', kA: '-1', kB: '1', L: '-2023' }], ['−√(9x²+2022x−2021) + ax − b → 2023', { dir: '+', s: '-', poly: '9x^2+2022x-2021', kA: '1', kB: '-1', L: '2023' }]] }
+];
+
+/* ---------- toast ---------- */
+let tTimer;
+function toast(title, msg, kind) {
+  const t = $('#toast'); t.className = 'toast show' + (kind === 'warn' ? ' warn' : '');
+  $('#tt').textContent = title; $('#tm').textContent = msg;
+  clearTimeout(tTimer); tTimer = setTimeout(() => t.classList.remove('show'), 7000);
+}
+$('#toast .x').onclick = () => $('#toast').classList.remove('show');
+
+/* ---------- KaTeX ---------- */
+function typeset(el) {
+  if (window.renderMathInElement) {
+    try { renderMathInElement(el, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }], throwOnError: false }); } catch (e) {}
+  } else pendingTypeset.add(el);
+}
+const pendingTypeset = new Set();
+window.addEventListener('load', () => {
+  if (!window.renderMathInElement) toast('Formule se ne prikazuju', 'Biblioteka za formule (KaTeX) nije učitana — provjeri internet vezu. Rješavač i dalje radi, ali formule su u sirovom obliku.', 'warn');
+  pendingTypeset.forEach(typeset); pendingTypeset.clear();
+});
+
+/* ---------- forma ---------- */
+const sel = $('#type');
+TYPES.forEach(t => { const o = document.createElement('option'); o.value = t.id; o.textContent = t.name; sel.appendChild(o); });
+let cur = TYPES[0];
+function values() { const v = {}; document.querySelectorAll('#fields [data-k]').forEach(e => v[e.dataset.k] = e.value.trim()); return v; }
+function buildFields(preset) {
+  const box = $('#fields'); box.innerHTML = '';
+  cur.fields.forEach(f => {
+    const d = document.createElement('div'); if (f.w) d.className = 'wide'; d.dataset.f = f.k;
+    const id = 'f_' + f.k;
+    d.innerHTML = `<label for="${id}">${esc(f.l)}</label>` + (f.opts
+      ? `<select id="${id}" data-k="${f.k}">${f.opts.map(o => `<option value="${esc(o[0])}">${esc(o[1])}</option>`).join('')}</select>`
+      : `<input type="text" id="${id}" data-k="${f.k}" placeholder="${esc(f.ph || '')}" autocomplete="off" autocapitalize="off" spellcheck="false">`);
+    box.appendChild(d);
+  });
+  const pv = preset || cur.presets[0][1];
+  Object.entries(pv).forEach(([k, val]) => { const e = box.querySelector(`[data-k="${k}"]`); if (e) e.value = val; });
+  box.querySelectorAll('[data-k]').forEach(e => e.addEventListener(e.tagName === 'SELECT' ? 'change' : 'input', onEdit));
+  visibility(); preview();
+}
+function visibility() { const v = values(); cur.fields.forEach(f => { if (f.show) document.querySelector(`[data-f="${f.k}"]`).classList.toggle('hidden', !f.show(v)); }); }
+function buildPresets() {
+  const p = $('#presets'); p.innerHTML = '<span style="font-size:.82rem;color:var(--mute);align-self:center">Primjeri sa kolokvijuma:</span>';
+  cur.presets.forEach(([lab, val]) => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = lab; b.onclick = () => { buildFields(val); $('#out').innerHTML = ''; }; p.appendChild(b); });
+}
+function selectType(id, preset) { cur = TYPES.find(t => t.id === id); sel.value = id; $('#tdesc').textContent = cur.desc; buildPresets(); buildFields(preset); $('#out').innerHTML = ''; }
+sel.onchange = () => selectType(sel.value);
+let pvTimer;
+function onEdit() { visibility(); clearTimeout(pvTimer); pvTimer = setTimeout(preview, 250); }
+function preview() {
+  const box = $('#preview');
+  let tex = null;
+  try { const r = solve(cur.id, values()); tex = r.problem; } catch (e) { tex = CUR.problem; }
+  if (tex) { box.innerHTML = '$$' + tex + '$$'; typeset(box); }
+  else box.innerHTML = '<span class="ph">Zadatak još nije ispravno unesen.</span>';
+}
+$('#help').onclick = () => $('#syntax').classList.toggle('hidden');
+
+/* ---------- rješavanje ---------- */
+function fmt(x) {
+  if (Number.isNaN(x)) return '—';
+  if (!isFinite(x)) return x > 0 ? '+∞ (preliv)' : '−∞ (preliv)';
+  const a = Math.abs(x);
+  if (a !== 0 && (a >= 1e9 || a < 1e-6)) return x.toExponential(5).replace('e', '·10^');
+  return (+x.toPrecision(9)).toString();
+}
+function render(sol) {
+  const hintsOn = $('#hints').checked, trySelf = $('#tryself').checked && sol.result.type !== 'params';
+  const out = $('#out');
+  let h = `<section class="card"><div class="body" style="text-align:center">$$${sol.problem}$$</div></section>`;
+  h += '<div class="steps">';
+  sol.steps.forEach((s, i) => {
+    h += `<article class="step" data-i="${i}"><h3>${esc(s.title)}</h3>`;
+    if (hintsOn) h += `<div class="hint"><b>Hint:</b> ${s.hint}</div><div class="acts"><button class="btn small" data-show="${i}">Prikaži korak</button></div>`;
+    h += `<div class="body ${hintsOn ? 'hidden' : ''}" id="b${i}">${s.body}</div>`;
+    h += `<div class="acts ${hintsOn ? 'hidden' : ''}" id="a${i}"><button class="btn ghost small" data-why="${i}">Zašto?</button></div>`;
+    h += `<div class="why hidden" id="w${i}"><b>Zašto:</b> ${esc(s.why)}</div></article>`;
+  });
+  h += '</div>';
+  h += '<section class="card">';
+  if (trySelf) h += `<label for="ans">Tvoj odgovor (npr. 2/3, -inf, e^2, sqrt(2)/2, ne postoji)</label><div class="try"><input type="text" id="ans" autocomplete="off" autocapitalize="off"><button class="btn small" id="chk">Provjeri</button><button class="btn ghost small" id="reveal">Prikaži rezultat</button></div><div class="fb" id="fb"></div>`;
+  const hideRes = trySelf || hintsOn;
+  if (hintsOn && !trySelf) h += `<div class="acts" style="justify-content:center;margin-bottom:8px"><button class="btn" id="reveal">Prikaži rezultat</button></div>`;
+  h += `<div class="result ${hideRes ? 'hidden' : ''}" id="res"><div class="lab">Rezultat</div>$$${sol.result.type === 'params' ? '' : 'L = '}${resTex(sol.result)}$$</div>`;
+  if (sol.note) h += `<div class="note">${esc(sol.note)}</div>`;
+  if (sol.numeric) {
+    const nl = sol.nLabel || 'n';
+    const rows = (sol.nVals || [10, 100, 1000, 10000]).map(n => { let v; try { v = sol.numeric(n); } catch (e) { v = NaN; } return `<tr><td>${nl} = ${n}</td><td>${fmt(v)}</td></tr>`; }).join('');
+    h += `<details style="margin-top:12px"><summary>Numerička provjera (ilustracija, nije dokaz)</summary><table style="margin-top:8px"><tr><th>${nl}</th><th>vrijednost izraza</th></tr>${rows}</table><p class="desc">Neki nizovi konvergiraju vrlo sporo (npr. kad su osnove 2022 i 2023), pa vrijednosti mogu biti daleko od limesa i za velike ${nl}. Mjerodavan je algebarski postupak iznad.</p></details>`;
+  }
+  h += '</section>';
+  out.innerHTML = h; typeset(out);
+  out.querySelectorAll('[data-show]').forEach(b => b.onclick = () => { const i = b.dataset.show; $('#b' + i).classList.remove('hidden'); $('#a' + i).classList.remove('hidden'); b.parentElement.remove(); });
+  out.querySelectorAll('[data-why]').forEach(b => b.onclick = () => { const w = $('#w' + b.dataset.why); w.classList.toggle('hidden'); b.textContent = w.classList.contains('hidden') ? 'Zašto?' : 'Sakrij obrazloženje'; });
+  if (hintsOn && !trySelf) $('#reveal').onclick = e => { $('#res').classList.remove('hidden'); e.target.parentElement.remove(); };
+  if (trySelf) {
+    const showRes = () => $('#res').classList.remove('hidden');
+    $('#reveal').onclick = showRes;
+    const doCheck = () => {
+      const fb = $('#fb');
+      try { const a = parseAnswer($('#ans').value); const ok = checkAnswer(a, sol.result); fb.className = 'fb ' + (ok ? 'ok' : 'bad'); fb.textContent = ok ? '✓ Tačno!' : '✗ Nije tačno — pogledaj korake (uključi hintove) i pokušaj ponovo.'; if (ok) showRes(); }
+      catch (e) { fb.className = 'fb bad'; fb.textContent = e.message; }
+    };
+    $('#chk').onclick = doCheck; $('#ans').onkeydown = e => { if (e.key === 'Enter') doCheck(); };
+  }
+  out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+$('#go').onclick = () => {
+  try { render(solve(cur.id, values())); }
+  catch (e) {
+    $('#out').innerHTML = '';
+    if (e instanceof Unsupported) toast('Ovaj slučaj nije podržan', e.message + ' Rješavač radi samo za zadatke sa provjerenim šablonom.', 'warn');
+    else if (e instanceof MathErr) toast('Greška u unosu', e.message);
+    else { toast('Neočekivana greška', 'Ovaj unos nije moguće obraditi. Provjeri zapis ili izaberi drugi tip zadatka.'); console.error(e); }
+  }
+};
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('#fields input')) $('#go').click(); });
+
+/* ---------- tabovi i tema ---------- */
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x === b));
+  $('#tab-solve').classList.toggle('hidden', b.dataset.tab !== 'solve');
+  $('#tab-rules').classList.toggle('hidden', b.dataset.tab !== 'rules');
+  if (b.dataset.tab === 'rules' && !$('#tab-rules').dataset.done) { $('#tab-rules').innerHTML = RULES; typeset($('#tab-rules')); $('#tab-rules').dataset.done = 1; }
+  try { localStorage.setItem('lim_tab', b.dataset.tab); } catch (e) {}
+});
+$('#theme').onclick = () => {
+  const r = document.documentElement, dark = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  r.dataset.theme = dark ? 'light' : 'dark'; try { localStorage.setItem('lim_theme', r.dataset.theme); } catch (e) {}
+};
+try { const th = localStorage.getItem('lim_theme'); if (th) document.documentElement.dataset.theme = th; } catch (e) {}
+try { const hs = localStorage.getItem('lim_hints'); if (hs !== null) $('#hints').checked = hs === '1'; } catch (e) {}
+$('#hints').onchange = () => { try { localStorage.setItem('lim_hints', $('#hints').checked ? '1' : '0'); } catch (e) {} if ($('#out').innerHTML) $('#go').click(); };
+$('#tryself').onchange = () => { if ($('#out').innerHTML) $('#go').click(); };
+
+selectType('rational');
+try { if (localStorage.getItem('lim_tab') === 'rules') document.querySelector('[data-tab="rules"]').click(); } catch (e) {}
+
+/* ---------- PRAVILA ---------- */
+const RULES = String.raw`
+<section class="card"><h2>Sadržaj</h2><div class="toc">
+<a class="chip" href="#r-def">Definicija</a><a class="chip" href="#r-ops">Operacije</a><a class="chip" href="#r-std">Standardni limesi</a><a class="chip" href="#r-inf">Računanje sa ∞</a><a class="chip" href="#r-ind">Neodređeni oblici</a><a class="chip" href="#r-thm">Teoreme</a><a class="chip" href="#r-grow">Brzina rasta</a><a class="chip" href="#r-sum">Formule za sume</a><a class="chip" href="#r-alg">Algebarske formule</a><a class="chip" href="#r-met">Koju metodu kada</a><a class="chip" href="#r-err">Česte greške</a>
+</div></section>
+
+<section class="card" id="r-def"><h2>Definicija i osnovni pojmovi</h2>
+<p><b>Niz</b> je funkcija $a:\mathbb{N}\to\mathbb{R}$, zapis $(a_n)$. Broj $L$ je <b>limes niza</b> ako</p>
+<div class="bx">$$\lim_{n\to\infty} a_n = L \iff (\forall \varepsilon>0)(\exists n_0\in\mathbb{N})(\forall n\ge n_0)\ |a_n - L|<\varepsilon$$</div>
+<p>Riječima: koliko god mali „pojas“ $\varepsilon$ oko $L$ izabrali, od nekog člana nadalje <i>svi</i> članovi niza su u tom pojasu.</p>
+<ul>
+<li><b>Konvergentan</b> niz ima konačan limes. Limes je jedinstven.</li>
+<li><b>Divergentan</b> niz: teži $\pm\infty$ (određeno divergentan) ili nema limes (npr. osciluje: $(-1)^n$).</li>
+<li>$\lim a_n = +\infty$ znači: za svako $M$ postoji $n_0$ takvo da je $a_n > M$ za sve $n\ge n_0$.</li>
+<li><b>Nula-niz</b>: niz čiji je limes $0$.</li>
+<li><b>Ograničen</b> niz: postoji $M$ takvo da je $|a_n|\le M$ za svako $n$. Svaki konvergentan niz je ograničen (obrnuto ne važi!).</li>
+<li><b>Monoton</b> niz: rastući ($a_{n+1}\ge a_n$) ili opadajući ($a_{n+1}\le a_n$).</li>
+<li><b>Podniz</b> $(a_{n_k})$: niz izabranih članova, npr. parni $a_{2k}$ ili neparni $a_{2k+1}$. <b>Tačka nagomilavanja</b> je limes nekog podniza.</li>
+</ul></section>
+
+<section class="card" id="r-ops"><h2>Pravila za operacije</h2>
+<p>Ako je $\lim a_n = a$ i $\lim b_n = b$, gdje su $a$, $b$ <b>konačni</b> brojevi:</p>
+<div class="bx">$$\lim(a_n\pm b_n)=a\pm b,\qquad \lim(a_n b_n)=ab,\qquad \lim(c\,a_n)=c\,a$$
+$$\lim\frac{a_n}{b_n}=\frac{a}{b}\ (b\ne0),\qquad \lim a_n^{\,k}=a^k,\qquad \lim\sqrt[k]{a_n}=\sqrt[k]{a}\ (a_n\ge0)$$
+$$\lim |a_n| = |a|,\qquad \lim a_n^{\,b_n}=a^b\ \ (a>0)$$</div>
+<p class="mistake"><b>Pažnja:</b> pravila važe samo kad oba limesa postoje i konačni su, i za <b>fiksan</b> broj sabiraka/činilaca. Ako se dobije neodređen oblik, pravila ne daju odgovor.</p>
+<p>Neprekidne funkcije „prolaze kroz limes“: $\lim f(a_n) = f(\lim a_n)$ (korijen, stepen, $e^x$, $\ln x$, $\sin x$…).</p></section>
+
+<section class="card" id="r-std"><h2>Standardni (poznati) limesi</h2>
+<div class="bx">$$\lim\frac{1}{n^{p}}=0\ \ (p>0)\qquad \lim n^{p}=+\infty\ \ (p>0)$$
+$$\lim q^n=\begin{cases}0,&|q|<1\\1,&q=1\\+\infty,&q>1\\\text{ne postoji},&q\le-1\end{cases}$$
+$$\lim\sqrt[n]{a}=1\ (a>0)\qquad \lim\sqrt[n]{n}=1\qquad \lim\sqrt[n]{n^k}=1$$
+$$\lim\left(1+\frac1n\right)^n=e\approx2{,}71828\qquad \lim\left(1+\frac{a}{n}\right)^n=e^{a}$$
+$$\lim\left(1+\frac{1}{x_n}\right)^{x_n}=e\ \text{ za svaki } x_n\to\pm\infty$$
+$$\lim\frac{n^k}{a^n}=0\ (a>1)\qquad \lim\frac{a^n}{n!}=0\qquad \lim\frac{n!}{n^n}=0\qquad \lim\frac{\ln n}{n^p}=0\ (p>0)$$
+$$\lim\frac{\sin x_n}{x_n}=1\ \text{ za } x_n\to0\qquad \lim n\sin\frac1n=1$$</div></section>
+
+<section class="card" id="r-inf"><h2>Računanje sa beskonačnošću (određeni oblici)</h2>
+<p>Ovo <b>nisu</b> neodređeni oblici — rezultat je uvijek isti ($c$ je konačan broj):</p>
+<div class="bx">$$\infty+\infty=\infty\qquad c\pm\infty=\pm\infty\qquad \infty\cdot\infty=\infty\qquad c\cdot\infty=\pm\infty\ (c\ne0)$$
+$$\frac{c}{\pm\infty}=0\qquad \frac{\infty}{c}=\pm\infty\ (c\ne0)\qquad \frac{c}{0^{+}}=\pm\infty\ (c\ne0)\qquad \frac{0}{\infty}=0$$
+$$q^{+\infty}=+\infty\ (q>1)\qquad q^{+\infty}=0\ (0\le q<1)\qquad \infty^{+\infty}=\infty\qquad 0^{+\infty}=0\qquad \infty^{c}=\infty\ (c>0)$$</div>
+<p class="desc">Znak kod $c/0$ zavisi od toga da li imenilac teži nuli sa pozitivne ili negativne strane. Ako mijenja znak (npr. $(-1)^n/n$ u imeniocu), limes ne postoji.</p></section>
+
+<section class="card" id="r-ind"><h2>Neodređeni oblici <span class="tag">7 oblika</span></h2>
+<p>Neodređen oblik znači da poznavanje limesa dijelova <b>ne određuje</b> limes cjeline — isti oblik može dati $0$, bilo koji broj ili $\infty$. Zato se izraz mora transformisati. Za svaki oblik ispod je dato nekoliko primjera sa različitim rezultatima — to je „dokaz“ da je oblik neodređen.</p>
+<div class="forms">
+<div class="form"><div class="t">$\dfrac{0}{0}$</div><p>$\frac{1/n}{1/n}\to1$, $\frac{1/n^2}{1/n}\to0$, $\frac{1/n}{1/n^2}\to\infty$.</p><p><b>Rješava se:</b> skraćivanjem, racionalizacijom, svođenjem na $\frac{\infty}{\infty}$.</p></div>
+<div class="form"><div class="t">$\dfrac{\infty}{\infty}$</div><p>$\frac{2n}{n}\to2$, $\frac{n}{n^2}\to0$, $\frac{n^2}{n}\to\infty$.</p><p><b>Rješava se:</b> izvlačenjem najjačeg člana (najveći stepen $n^k$ ili najveća osnova $a^n$).</p></div>
+<div class="form"><div class="t">$\infty-\infty$</div><p>$(n+1)-n\to1$, $n^2-n\to\infty$, $\sqrt{n+1}-\sqrt n\to0$.</p><p><b>Rješava se:</b> racionalizacijom, svođenjem na zajednički imenilac, izvlačenjem najjačeg člana.</p></div>
+<div class="form"><div class="t">$0\cdot\infty$</div><p>$\frac1n\cdot n\to1$, $\frac1{n^2}\cdot n\to0$, $\frac1n\cdot n^2\to\infty$.</p><p><b>Rješava se:</b> pisanjem kao $\frac{0}{1/\infty}=\frac00$ ili $\frac{\infty}{1/0}=\frac{\infty}{\infty}$.</p></div>
+<div class="form"><div class="t">$1^{\infty}$</div><p>$\left(1+\frac1n\right)^n\to e$, $\left(1+\frac1{n^2}\right)^n\to1$, $\left(1+\frac1n\right)^{n^2}\to\infty$.</p><p><b>Rješava se:</b> $a_n^{b_n}=\left[\left(1+\frac1{x_n}\right)^{x_n}\right]^{b_n/x_n}\to e^{\lim b_n(a_n-1)}$.</p></div>
+<div class="form"><div class="t">$0^{0}$</div><p>$\left(\frac1n\right)^{1/n}\to1$, $\left(e^{-n}\right)^{1/n}=e^{-1}$.</p><p><b>Rješava se:</b> $a^b=e^{b\ln a}$, pa se dobije $e^{0\cdot\infty}$.</p></div>
+<div class="form"><div class="t">$\infty^{0}$</div><p>$n^{1/n}\to1$, $\left(e^{n}\right)^{1/n}=e$.</p><p><b>Rješava se:</b> $a^b=e^{b\ln a}$, pa se dobije $e^{0\cdot\infty}$.</p></div>
+</div>
+<p class="desc">Važno: $1^\infty$ je neodređen jer osnova samo <i>teži</i> 1 (nije tačno 1), a eksponent je ogroman. Broj tačno $1$ na bilo koji stepen je $1$. Isto tako, $\frac{0}{0}$ je neodređen samo kao oblik limesa — sam izraz $0/0$ nije definisan.</p></section>
+
+<section class="card" id="r-thm"><h2>Teoreme</h2>
+<h3>Teorema o dva policajca (sendvič)</h3>
+<div class="bx">$$x_n\le a_n\le y_n\ \text{ (od nekog } n\text{)},\quad \lim x_n=\lim y_n=L\ \Rightarrow\ \lim a_n=L$$</div>
+<p>Koristi se kad se izraz ne može direktno izračunati: sume sa $n$ sabiraka, $\sqrt[n]{a^n+b^n}$, nizovi sa $\sin$, $\cos$.</p>
+<h3>Ograničen × nula-niz</h3>
+<div class="bx">$$|b_n|\le M,\ \lim x_n=0\ \Rightarrow\ \lim b_n x_n=0$$</div>
+<p>Npr. $\frac{\sin n}{n}\to0$, $\frac{(-1)^n}{n}\to0$. Pažnja: $\lim\sin n$ ne postoji, pa se ne smije pisati $\lim\sin n\cdot\lim\frac1n$.</p>
+<h3>Monoton i ograničen niz (Weierstrass)</h3>
+<p>Svaki monoton i ograničen niz je konvergentan. Rastući i ograničen odozgo konvergira ka svom supremumu. Tako se dokazuje i postojanje broja $e$.</p>
+<h3>Podnizovi</h3>
+<p>Ako $a_n\to L$, onda i svaki podniz teži $L$. Zato: ako dva podniza imaju <b>različite</b> limese (npr. parni i neparni članovi), niz <b>nema</b> limes. Primjer: $3+(-1)^n$ ima podnizove $\to4$ i $\to2$.</p>
+<h3>Teleskopska suma</h3>
+<div class="bx">$$\sum_{k=1}^{n}(c_k-c_{k+1}) = c_1-c_{n+1}$$</div>
+<p>Unutrašnji članovi se poništavaju. Tipično: $\frac{1}{k(k+1)}=\frac1k-\frac1{k+1}$, $k\cdot k!=(k+1)!-k!$.</p>
+<h3>Štolcova teorema (dodatno)</h3>
+<p>Ako $b_n$ strogo raste ka $+\infty$ i postoji $\lim\frac{a_{n+1}-a_n}{b_{n+1}-b_n}=L$, onda je $\lim\frac{a_n}{b_n}=L$. Korisno za sume: $\frac{1^p+\dots+n^p}{n^{p+1}}\to\frac{1}{p+1}$.</p>
+</section>
+
+<section class="card" id="r-grow"><h2>Brzina rasta (hijerarhija)</h2>
+<div class="bx">$$\ln n\ \ll\ n^{p}\ \ll\ a^n\ \ll\ n!\ \ll\ n^n\qquad (p>0,\ a>1)$$</div>
+<p>„$f\ll g$“ znači $\lim\frac{f}{g}=0$. U zbiru pobjeđuje najbrži član:</p>
+<ul><li>kod polinoma — najveći stepen ($n^3$ pobjeđuje $n^2$),</li><li>kod eksponencijalnih — najveća osnova po apsolutnoj vrijednosti ($5^n$ pobjeđuje $4^n$),</li><li>kod korijena — $\sqrt[m]{n^D}=n^{D/m}$, pa se porede izložioci $D/m$.</li></ul></section>
+
+<section class="card" id="r-sum"><h2>Formule za sume</h2>
+<div class="bx">$$\sum_{k=1}^{n}1=n\qquad \sum_{k=1}^{n}k=\frac{n(n+1)}{2}\qquad \sum_{k=1}^{n}k^2=\frac{n(n+1)(2n+1)}{6}\qquad \sum_{k=1}^{n}k^3=\left(\frac{n(n+1)}{2}\right)^2$$
+$$\sum_{k=1}^{n}(2k-1)=n^2\qquad \sum_{k=0}^{n}q^k=\frac{1-q^{n+1}}{1-q}\ (q\ne1)\qquad \sum_{k=1}^{n}\frac{1}{k(k+1)}=1-\frac1{n+1}$$</div>
+<p class="desc">Za limes je dovoljan vodeći član: $\sum_{k=1}^n k^p\approx\frac{n^{p+1}}{p+1}$.</p></section>
+
+<section class="card" id="r-alg"><h2>Algebarske formule koje se stalno koriste</h2>
+<div class="bx">$$a^2-b^2=(a-b)(a+b)\qquad a^3-b^3=(a-b)(a^2+ab+b^2)\qquad a^3+b^3=(a+b)(a^2-ab+b^2)$$
+$$\sqrt{A}-\sqrt{B}=\frac{A-B}{\sqrt A+\sqrt B}\qquad \sqrt[3]{A}-\sqrt[3]{B}=\frac{A-B}{\sqrt[3]{A^2}+\sqrt[3]{AB}+\sqrt[3]{B^2}}$$
+$$a^{n+k}=a^k\cdot a^n\qquad (n+1)!=(n+1)\cdot n!\qquad \sqrt{x^2}=|x|$$</div></section>
+
+<section class="card" id="r-met"><h2>Koju metodu kada?</h2>
+<ul>
+<li><b>Polinom/polinom ($\frac\infty\infty$)</b> → izvuci (podijeli sa) najveći stepen od $n$.</li>
+<li><b>Zbirovi $a^n$</b> → izvuci najveću osnovu; ostali članovi postaju $q^n$, $|q|<1$.</li>
+<li><b>Razlika korijena ($\infty-\infty$)</b> → racionalizacija; za različite redove korijena dodaj i oduzmi zajednički vodeći član.</li>
+<li><b>$\left(\frac{P}{Q}\right)^{R}$ sa osnovom $\to1$ ($1^\infty$)</b> → svođenje na $\left(1+\frac1x\right)^x\to e$.</li>
+<li><b>$\sqrt[n]{\text{zbir }a^n}$</b> → sendvič; limes je najveća osnova.</li>
+<li><b>Suma sa $n$ sabiraka</b> → formula za sumu (zatvoren oblik), teleskopiranje ili sendvič.</li>
+<li><b>$\sin$, $\cos$, $(-1)^n$</b> → ograničen × nula-niz; ako drugi faktor ne teži 0 — podnizovi.</li>
+<li><b>Parametri $a$, $b$</b> → koeficijent uz $x$ mora biti 0, a konstanta jednaka $L$. Za $x\to-\infty$: $\sqrt{x^2}=-x$.</li>
+</ul></section>
+
+<section class="card" id="r-err"><h2>Česte greške</h2>
+<div class="mistake">$\frac{\infty}{\infty}=1$, $\infty-\infty=0$, $1^\infty=1$ — <b>pogrešno</b>. To su neodređeni oblici.</div>
+<div class="mistake">„Svaki sabirak teži 0, pa i suma teži 0“ — važi samo za <b>fiksan</b> broj sabiraka. $\underbrace{\tfrac1n+\dots+\tfrac1n}_{n}=1$.</div>
+<div class="mistake">$\left(1+\frac1n\right)^n\to1^\infty=1$ — pogrešno, limes je $e$.</div>
+<div class="mistake">$\sqrt{x^2}=x$ za $x\to-\infty$ — pogrešno, $\sqrt{x^2}=|x|=-x$.</div>
+<div class="mistake">$\lim(\sin n\cdot\tfrac1n)=\lim\sin n\cdot\lim\tfrac1n$ — pogrešno, $\lim\sin n$ ne postoji. Koristi teoremu o ograničenom nizu.</div>
+<div class="mistake">Zaboraviti da $(-2)^n$ mijenja znak: $\lim(-2)^n$ ne postoji (nije $+\infty$).</div>
+<div class="mistake">Numerička provjera ($n=1000$) nije dokaz — neki nizovi konvergiraju veoma sporo.</div>
+</section>`;
+})();
+
+</script>
+</body>
+</html>
